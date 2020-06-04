@@ -1,0 +1,104 @@
+h3 {
+  font-family: 'Lobster';
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.5;
+  color: #85144b;
+}
+
+#maindiv{
+  padding-left:20px;
+}
+
+hr {
+  margin-top:4px;
+}
+
+.navbar-brand {
+  font-size:16px;
+  font-weight:bold;
+  padding-right:0;
+  padding-left:0;
+}
+
+#siderbar .col-sm-3{
+  padding-left:0;
+}
+
+
+
+#introduction_paragraph {
+  padding-left: 40px;
+	padding-right: 40px;
+	padding-top: 20px;
+	padding-bottom: 15px;
+	border-style: solid;
+	border-width: 2px;
+  border-radius: 15px;
+	opacity: 0.9;
+
+  
+}
+#introduction_paragraph2 {
+   color: brown;
+   background-color: white;
+
+}
+#featuretable_progress { 
+    padding-bottom:0;
+    margin-bottom:0;
+    height:0;
+}
+#classlabel_progress { 
+    padding-bottom:0;
+    margin-bottom:0;
+    height:0;
+}
+.underline {
+    text-decoration: underline;
+}
+
+#methodbuttoni_wf1 {
+  padding-top:3px;
+  padding-bottom:3px;
+  padding-left:10px;
+  padding-right:10px;
+  margin-left:5px;
+}
+
+#methodbuttonii_wf1 {
+  padding-top:3px;
+  padding-bottom:3px;
+  padding-left:10px;
+  padding-right:10px;
+  margin-left:5px;
+}
+
+#methodbuttoniii_wf1 {
+  padding-top:3px;
+  padding-bottom:3px;
+  padding-left:10px;
+  padding-right:10px;
+  margin-left:5px;
+}
+
+#methodbuttoni_wf2 {
+  padding-top:3px;
+  padding-bottom:3px;
+  padding-left:10px;
+  padding-right:10px;
+  margin-left:5px;
+}
+
+#manhattan_only_plot1 {
+  margin: 0 auto;
+}
+
+#manhattan_only_plot2 {
+  margin: 0 auto;
+}
+
+#volcano_only_plot1 {
+  margin: 0 auto;
+}
+
