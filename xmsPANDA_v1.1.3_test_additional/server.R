@@ -4,7 +4,7 @@ options(shiny.sanitize.errors=FALSE)
 source("R/source_codes/xmsPANDA_v1.0.8.38.R")
 
 server <- function(input, output, session) {
- 
+  
   ##################################  Additional Analysis Page ##########################
   
   check1_interactive <- reactiveValues(count = 1)
@@ -94,401 +94,401 @@ server <- function(input, output, session) {
   })
   
   
-all_alert <- reactive({
+  all_alert <- reactive({
     
     if(!is.null(input_file_interactive())){
+      
+      if(isolate(input$choose_graph)=='Manhattan Plot only'){
         
-        if(isolate(input$choose_graph)=='Manhattan Plot only'){
+        if(isolate(input$yaxislabel_manhattan_only)=='pvalue' && isolate(input$adjdashline_manhattan_only)=='no'){
           
-          if(isolate(input$yaxislabel_manhattan_only)=='pvalue' && isolate(input$adjdashline_manhattan_only)=='no'){
-            
-            if(ncol(input_file_interactive())==3 || ncol(input_file_interactive())==4){
-              closeAlert(session, "check_input_interactive_single_alert")
-              check_input_interactive_single <- TRUE
-            }else{
-              closeAlert(session, "check_input_interactive_single_alert")
-              createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 3 or 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'(optional).", append = TRUE)
-              check_input_interactive_single <- FALSE
-            }   
-            
-          } else if(isolate(input$yaxislabel_manhattan_only)=='pvalue' && isolate(input$adjdashline_manhattan_only)=='yes') {
-            
-            if(ncol(input_file_interactive())==4){
-              closeAlert(session, "check_input_interactive_single_alert")
-              check_input_interactive_single <- TRUE
-            }else{
-              closeAlert(session, "check_input_interactive_single_alert")
-              createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'.", append = TRUE)
-              check_input_interactive_single <- FALSE
-            } 
-            
-          } else{
-            
-            if(ncol(input_file_interactive())==3){
-              closeAlert(session, "check_input_interactive_single_alert")
-              check_input_interactive_single <- TRUE
-            }else{
-              closeAlert(session, "check_input_interactive_single_alert")
-              createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 3 columns separately for 'Name', 'log2foldchange', 'VIP'.", append = TRUE)
-              check_input_interactive_single <- FALSE
-            } 
-          }
+          if(ncol(input_file_interactive())==3 || ncol(input_file_interactive())==4){
+            closeAlert(session, "check_input_interactive_single_alert")
+            check_input_interactive_single <- TRUE
+          }else{
+            closeAlert(session, "check_input_interactive_single_alert")
+            createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 3 or 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'(optional).", append = TRUE)
+            check_input_interactive_single <- FALSE
+          }   
+          
+        } else if(isolate(input$yaxislabel_manhattan_only)=='pvalue' && isolate(input$adjdashline_manhattan_only)=='yes') {
+          
+          if(ncol(input_file_interactive())==4){
+            closeAlert(session, "check_input_interactive_single_alert")
+            check_input_interactive_single <- TRUE
+          }else{
+            closeAlert(session, "check_input_interactive_single_alert")
+            createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'.", append = TRUE)
+            check_input_interactive_single <- FALSE
+          } 
+          
+        } else{
+          
+          if(ncol(input_file_interactive())==3){
+            closeAlert(session, "check_input_interactive_single_alert")
+            check_input_interactive_single <- TRUE
+          }else{
+            closeAlert(session, "check_input_interactive_single_alert")
+            createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 3 columns separately for 'Name', 'log2foldchange', 'VIP'.", append = TRUE)
+            check_input_interactive_single <- FALSE
+          } 
+        }
+        
+      }else{
+        
+        if(isolate(input$adjdashline_volcano_only)=='no'){
+          
+          if(ncol(input_file_interactive())==3 || ncol(input_file_interactive())==4){
+            closeAlert(session, "check_input_interactive_single_alert")
+            check_input_interactive_single <- TRUE
+          }else{
+            closeAlert(session, "check_input_interactive_single_alert")
+            createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 3 or 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'(optional).", append = TRUE)
+            check_input_interactive_single <- FALSE
+          }   
           
         }else{
           
-          if(isolate(input$adjdashline_volcano_only)=='no'){
-            
-            if(ncol(input_file_interactive())==3 || ncol(input_file_interactive())==4){
-              closeAlert(session, "check_input_interactive_single_alert")
-              check_input_interactive_single <- TRUE
-            }else{
-              closeAlert(session, "check_input_interactive_single_alert")
-              createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 3 or 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'(optional).", append = TRUE)
-              check_input_interactive_single <- FALSE
-            }   
-            
+          if(ncol(input_file_interactive())==4){
+            closeAlert(session, "check_input_interactive_single_alert")
+            check_input_interactive_single <- TRUE
           }else{
-            
-            if(ncol(input_file_interactive())==4){
-              closeAlert(session, "check_input_interactive_single_alert")
-              check_input_interactive_single <- TRUE
-            }else{
-              closeAlert(session, "check_input_interactive_single_alert")
-              createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'.", append = TRUE)
-              check_input_interactive_single <- FALSE
-            } 
-            
-          }
+            closeAlert(session, "check_input_interactive_single_alert")
+            createAlert(session, "alert_interactive", "check_input_interactive_single_alert", title = "Input File Error", content = "The input file is only allowed to have 4 columns separately for 'Name', 'log2foldchange', 'p-value', 'adjusted p-value'.", append = TRUE)
+            check_input_interactive_single <- FALSE
+          } 
           
         }
-    
+        
+      }
+      
     }else{
       
       check_input_interactive_single <- TRUE
     }
-  
-  if(is.na(input$x_axis_spacing_type1_manhattan_only)){
-    closeAlert(session, "x_axis_spacing_type1_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_only_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument can't be empty.", append = TRUE)
-    check_x_axis_spacing_type1_manhattan_only <- FALSE
-  } else if (input$x_axis_spacing_type1_manhattan_only<0 | input$x_axis_spacing_type1_manhattan_only>1000) {
-    closeAlert(session, "x_axis_spacing_type1_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_only_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
-    check_x_axis_spacing_type1_manhattan_only <- FALSE
-  } else {
-    closeAlert(session, "x_axis_spacing_type1_manhattan_only_alert")
-    check_x_axis_spacing_type1_manhattan_only <- TRUE
-  }  
-  
-  if(is.na(input$x_axis_spacing_type2_manhattan_only)){
-    closeAlert(session, "x_axis_spacing_type2_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_only_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument can't be empty.", append = TRUE)
-    check_x_axis_spacing_type2_manhattan_only <- FALSE
-  } else if (input$x_axis_spacing_type2_manhattan_only<0 | input$x_axis_spacing_type2_manhattan_only>1000) {
-    closeAlert(session, "x_axis_spacing_type2_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_only_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
-    check_x_axis_spacing_type2_manhattan_only <- FALSE
-  } else {
-    closeAlert(session, "x_axis_spacing_type2_manhattan_only_alert")
-    check_x_axis_spacing_type2_manhattan_only <- TRUE
-  }
-  
-  if(is.na(input$y_axis_spacing_manhattan_only)){
-    closeAlert(session, "y_axis_spacing_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
-    check_y_axis_spacing_manhattan_only <- FALSE
-  } else if (input$y_axis_spacing_manhattan_only<0 | input$y_axis_spacing_manhattan_only>5) {
-    closeAlert(session, "y_axis_spacing_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5.", append = TRUE)
-    check_y_axis_spacing_manhattan_only <- FALSE
-  } else {
-    closeAlert(session, "y_axis_spacing_manhattan_only_alert")
-    check_y_axis_spacing_manhattan_only <- TRUE
-  }
-  
-  if(is.na(input$pvaluecutoff_manhattan_only)){
-    closeAlert(session, "pvaluecutoff_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument can't be empty.", append = TRUE)
-    check_pvaluecutoff_manhattan_only <- FALSE
-  } else if (input$pvaluecutoff_manhattan_only<0 | input$pvaluecutoff_manhattan_only>1) {
-    closeAlert(session, "pvaluecutoff_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
-    check_pvaluecutoff_manhattan_only <- FALSE
-  } else {
-    closeAlert(session, "pvaluecutoff_manhattan_only_alert")
-    check_pvaluecutoff_manhattan_only <- TRUE
-  }
-  
-  if(is.na(input$adjpvaluecutoff_manhattan_only)){
-    closeAlert(session, "adjpvaluecutoff_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
-    check_adjpvaluecutoff_manhattan_only <- FALSE
-  } else if (input$adjpvaluecutoff_manhattan_only<0 | input$adjpvaluecutoff_manhattan_only>1) {
-    closeAlert(session, "adjpvaluecutoff_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
-    check_adjpvaluecutoff_manhattan_only <- FALSE
-  } else {
-    closeAlert(session, "adjpvaluecutoff_manhattan_only_alert")
-    check_adjpvaluecutoff_manhattan_only <- TRUE
-  }
-  
-  if(is.na(input$vipcutoff_manhattan_only)){
-    closeAlert(session, "vipcutoff_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "vipcutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument can't be empty.", append = TRUE)
-    check_vipcutoff_manhattan_only <- FALSE
-  } else if (input$vipcutoff_manhattan_only<0 | input$vipcutoff_manhattan_only>10) {
-    closeAlert(session, "vipcutoff_manhattan_only_alert")
-    createAlert(session, "alert_interactive", "vipcutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument should be not smaller than 0 or larger than 10.", append = TRUE)
-    check_vipcutoff_manhattan_only <- FALSE
-  } else {
-    closeAlert(session, "vipcutoff_manhattan_only_alert")
-    check_vipcutoff_manhattan_only <- TRUE
-  }
-  
-  if(is.na(input$pvaluecutoff_volcano_only)){
-    closeAlert(session, "pvaluecutoff_volcano_only_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument can't be empty.", append = TRUE)
-    check_pvaluecutoff_volcano_only <- FALSE
-  } else if (input$pvaluecutoff_volcano_only<0 | input$pvaluecutoff_volcano_only>1) {
-    closeAlert(session, "pvaluecutoff_volcano_only_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
-    check_pvaluecutoff_volcano_only <- FALSE
-  } else {
-    closeAlert(session, "pvaluecutoff_volcano_only_alert")
-    check_pvaluecutoff_volcano_only <- TRUE
-  }
-  
-  if(is.na(input$lfc_volcano_only)){
-    closeAlert(session, "lfc_volcano_only_alert")
-    createAlert(session, "alert_interactive", "lfc_volcano_only_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument can't be empty.", append = TRUE)
-    check_lfc_volcano_only <- FALSE
-  } else if (input$lfc_volcano_only<0 | input$lfc_volcano_only>1) {
-    closeAlert(session, "lfc_volcano_only_alert")
-    createAlert(session, "alert_interactive", "lfc_volcano_only_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument should be not smaller than 0 or larger than 1.", append = TRUE)
-    check_lfc_volcano_only <- FALSE
-  } else {
-    closeAlert(session, "lfc_volcano_only_alert")
-    check_lfc_volcano_only <- TRUE
-  }
-  
-  if(is.na(input$rfc_volcano_only)){
-    closeAlert(session, "rfc_volcano_only_alert")
-    createAlert(session, "alert_interactive", "rfc_volcano_only_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument can't be empty.", append = TRUE)
-    check_rfc_volcano_only <- FALSE
-  } else if (input$rfc_volcano_only<1 | input$rfc_volcano_only>10) {
-    closeAlert(session, "rfc_volcano_only_alert")
-    createAlert(session, "alert_interactive", "rfc_volcano_only_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument should be not smaller than 1 or larger than 10.", append = TRUE)
-    check_rfc_volcano_only <- FALSE
-  } else {
-    closeAlert(session, "rfc_volcano_only_alert")
-    check_rfc_volcano_only <- TRUE
-  }
-  
-  if(is.na(input$x_axis_boundary_volcano_only)){
-    closeAlert(session, "x_axis_boundary_volcano_only_alert")
-    createAlert(session, "alert_interactive", "x_axis_boundary_volcano_only_alert", title = "Argument Input Error", content = "'X axis boundary' argument can't be empty.", append = TRUE)
-    check_x_axis_boundary_volcano_only <- FALSE
-  } else if (input$x_axis_boundary_volcano_only<0 | input$x_axis_boundary_volcano_only>20) {
-    closeAlert(session, "x_axis_boundary_volcano_only_alert")
-    createAlert(session, "alert_interactive", "x_axis_boundary_volcano_only_alert", title = "Argument Input Error", content = "'X axis boundary' argument should be not smaller than 0 or larger than 1.", append = TRUE)
-    check_x_axis_boundary_volcano_only <- FALSE
-  } else {
-    closeAlert(session, "x_axis_boundary_volcano_only_alert")
-    check_x_axis_boundary_volcano_only <- TRUE
-  }
-  
-  if(is.na(input$y_axis_spacing_volcano_only)){
-    closeAlert(session, "y_axis_spacing_volcano_only_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_volcano_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
-    check_y_axis_spacing_volcano_only <- FALSE
-  } else if (input$y_axis_spacing_volcano_only<0 | input$y_axis_spacing_volcano_only>5) {
-    closeAlert(session, "y_axis_spacing_volcano_only_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_volcano_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5.", append = TRUE)
-    check_y_axis_spacing_volcano_only <- FALSE
-  } else {
-    closeAlert(session, "y_axis_spacing_volcano_only_alert")
-    check_y_axis_spacing_volcano_only <- TRUE
-  }
-  
-  if(is.na(input$adjpvaluecutoff_volcano_only)){
-    closeAlert(session, "adjpvaluecutoff_volcano_only_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
-    check_adjpvaluecutoff_volcano_only <- FALSE
-  } else if (input$adjpvaluecutoff_volcano_only<0 | input$adjpvaluecutoff_volcano_only>1) {
-    closeAlert(session, "adjpvaluecutoff_volcano_only_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
-    check_adjpvaluecutoff_volcano_only <- FALSE
-  } else {
-    closeAlert(session, "adjpvaluecutoff_volcano_only_alert")
-    check_adjpvaluecutoff_volcano_only <- TRUE
-  }
-  
-  if(is.na(input$x_axis_spacing_type1_manhattan_box)){
-    closeAlert(session, "x_axis_spacing_type1_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_box_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument can't be empty.", append = TRUE)
-    check_x_axis_spacing_type1_manhattan_box <- FALSE
-  } else if (input$x_axis_spacing_type1_manhattan_box<0 | input$x_axis_spacing_type1_manhattan_box>1000) {
-    closeAlert(session, "x_axis_spacing_type1_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_box_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
-    check_x_axis_spacing_type1_manhattan_box <- FALSE
-  } else {
-    closeAlert(session, "x_axis_spacing_type1_manhattan_box_alert")
-    check_x_axis_spacing_type1_manhattan_box <- TRUE
-  }
-  
-  if(is.na(input$x_axis_spacing_type2_manhattan_box)){
-    closeAlert(session, "x_axis_spacing_type2_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_box_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument can't be empty.", append = TRUE)
-    check_x_axis_spacing_type2_manhattan_box <- FALSE
-  } else if (input$x_axis_spacing_type2_manhattan_box<0 | input$x_axis_spacing_type2_manhattan_box>1000) {
-    closeAlert(session, "x_axis_spacing_type2_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_box_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
-    check_x_axis_spacing_type2_manhattan_box <- FALSE
-  } else {
-    closeAlert(session, "x_axis_spacing_type2_manhattan_box_alert")
-    check_x_axis_spacing_type2_manhattan_box <- TRUE
-  }
-  
-  if(is.na(input$y_axis_spacing_manhattan_box)){
-    closeAlert(session, "y_axis_spacing_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
-    check_y_axis_spacing_manhattan_box <- FALSE
-  } else if (input$y_axis_spacing_manhattan_box<0 | input$y_axis_spacing_manhattan_box>5) {
-    closeAlert(session, "y_axis_spacing_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5", append = TRUE)
-    check_y_axis_spacing_manhattan_box <- FALSE
-  } else {
-    closeAlert(session, "y_axis_spacing_manhattan_box_alert")
-    check_y_axis_spacing_manhattan_box <- TRUE
-  }
-  
-  if(is.na(input$pvaluecutoff_manhattan_box)){
-    closeAlert(session, "pvaluecutoff_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
-    check_pvaluecutoff_manhattan_box <- FALSE
-  } else if (input$pvaluecutoff_manhattan_box<0 | input$pvaluecutoff_manhattan_box>1) {
-    closeAlert(session, "pvaluecutoff_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 1", append = TRUE)
-    check_pvaluecutoff_manhattan_box <- FALSE
-  } else {
-    closeAlert(session, "pvaluecutoff_manhattan_box_alert")
-    check_pvaluecutoff_manhattan_box <- TRUE
-  }
-  
-  if(is.na(input$adjpvaluecutoff_manhattan_box)){
-    closeAlert(session, "adjpvaluecutoff_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
-    check_adjpvaluecutoff_manhattan_box <- FALSE
-  } else if (input$adjpvaluecutoff_manhattan_box<0 | input$adjpvaluecutoff_manhattan_box>1) {
-    closeAlert(session, "adjpvaluecutoff_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1", append = TRUE)
-    check_adjpvaluecutoff_manhattan_box <- FALSE
-  } else {
-    closeAlert(session, "adjpvaluecutoff_manhattan_box_alert")
-    check_adjpvaluecutoff_manhattan_box <- TRUE
-  }
-  
-  if(is.na(input$vipcutoff_manhattan_box)){
-    closeAlert(session, "vipcutoff_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "vipcutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument can't be empty.", append = TRUE)
-    check_vipcutoff_manhattan_box <- FALSE
-  } else if (input$vipcutoff_manhattan_box<0 | input$vipcutoff_manhattan_box>10) {
-    closeAlert(session, "vipcutoff_manhattan_box_alert")
-    createAlert(session, "alert_interactive", "vipcutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument should be not smaller than 0 or larger than 10", append = TRUE)
-    check_vipcutoff_manhattan_box <- FALSE
-  } else {
-    closeAlert(session, "vipcutoff_manhattan_box_alert")
-    check_vipcutoff_manhattan_box <- TRUE
-  }
-  
-  if(is.na(input$pvaluecutoff_volcano_box)){
-    closeAlert(session, "pvaluecutoff_volcano_box_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument can't be empty.", append = TRUE)
-    check_pvaluecutoff_volcano_box <- FALSE
-  } else if (input$pvaluecutoff_volcano_box<0 | input$pvaluecutoff_volcano_box>1) {
-    closeAlert(session, "pvaluecutoff_volcano_box_alert")
-    createAlert(session, "alert_interactive", "pvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument should be not smaller than 0 or larger than 1", append = TRUE)
-    check_pvaluecutoff_volcano_box <- FALSE
-  } else {
-    closeAlert(session, "pvaluecutoff_volcano_box_alert")
-    check_pvaluecutoff_volcano_box <- TRUE
-  }
-  
-  if(is.na(input$lfc_volcano_box)){
-    closeAlert(session, "lfc_volcano_box_alert")
-    createAlert(session, "alert_interactive", "lfc_volcano_box_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument can't be empty.", append = TRUE)
-    check_lfc_volcano_box <- FALSE
-  } else if (input$lfc_volcano_box<0 | input$lfc_volcano_box>1) {
-    closeAlert(session, "lfc_volcano_box_alert")
-    createAlert(session, "alert_interactive", "lfc_volcano_box_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument should be not smaller than 0 or larger than 1", append = TRUE)
-    check_lfc_volcano_box <- FALSE
-  } else {
-    closeAlert(session, "lfc_volcano_box_alert")
-    check_lfc_volcano_box <- TRUE
-  }
-  
-  if(is.na(input$rfc_volcano_box)){
-    closeAlert(session, "rfc_volcano_box_alert")
-    createAlert(session, "alert_interactive", "rfc_volcano_box_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument can't be empty.", append = TRUE)
-    check_rfc_volcano_box <- FALSE
-  } else if (input$rfc_volcano_box<1 | input$rfc_volcano_box>10) {
-    closeAlert(session, "rfc_volcano_box_alert")
-    createAlert(session, "alert_interactive", "rfc_volcano_box_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument should be not smaller than 1 or larger than 10", append = TRUE)
-    check_rfc_volcano_box <- FALSE
-  } else {
-    closeAlert(session, "rfc_volcano_box_alert")
-    check_rfc_volcano_box <- TRUE
-  }
-  
-  if(is.na(input$x_axis_boundary_volcano_box)){
-    closeAlert(session, "x_axis_boundary_volcano_box_alert")
-    createAlert(session, "alert_interactive", "x_axis_boundary_volcano_box_alert", title = "Argument Input Error", content = "'X axis boundary' argument can't be empty.", append = TRUE)
-    check_x_axis_boundary_volcano_box <- FALSE
-  } else if (input$x_axis_boundary_volcano_box<0 | input$x_axis_boundary_volcano_box>20) {
-    closeAlert(session, "x_axis_boundary_volcano_box_alert")
-    createAlert(session, "alert_interactive", "x_axis_boundary_volcano_box_alert", title = "Argument Input Error", content = "'X axis boundary' argument should be not smaller than 0 or larger than 20", append = TRUE)
-    check_x_axis_boundary_volcano_box <- FALSE
-  } else {
-    closeAlert(session, "x_axis_boundary_volcano_box_alert")
-    check_x_axis_boundary_volcano_box <- TRUE
-  }
-  
-  if(is.na(input$y_axis_spacing_volcano_box)){
-    closeAlert(session, "y_axis_spacing_volcano_box_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_volcano_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
-    check_y_axis_spacing_volcano_box <- FALSE
-  } else if (input$y_axis_spacing_volcano_box<0 | input$y_axis_spacing_volcano_box>5) {
-    closeAlert(session, "y_axis_spacing_volcano_box_alert")
-    createAlert(session, "alert_interactive", "y_axis_spacing_volcano_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5", append = TRUE)
-    check_y_axis_spacing_volcano_box <- FALSE
-  } else {
-    closeAlert(session, "y_axis_spacing_volcano_box_alert")
-    check_y_axis_spacing_volcano_box <- TRUE
-  }
-  
-  if(is.na(input$adjpvaluecutoff_volcano_box)){
-    closeAlert(session, "adjpvaluecutoff_volcano_box_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
-    check_adjpvaluecutoff_volcano_box <- FALSE
-  } else if (input$adjpvaluecutoff_volcano_box<0 | input$adjpvaluecutoff_volcano_box>1) {
-    closeAlert(session, "adjpvaluecutoff_volcano_box_alert")
-    createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1", append = TRUE)
-    check_adjpvaluecutoff_volcano_box <- FALSE
-  } else {
-    closeAlert(session, "adjpvaluecutoff_volcano_box_alert")
-    check_adjpvaluecutoff_volcano_box <- TRUE
-  }
-  
-  all(check_input_interactive_single,check_x_axis_spacing_type1_manhattan_only,check_x_axis_spacing_type2_manhattan_only,check_y_axis_spacing_manhattan_only,check_pvaluecutoff_manhattan_only,check_adjpvaluecutoff_manhattan_only,check_vipcutoff_manhattan_only,
-      check_pvaluecutoff_volcano_only,check_lfc_volcano_only,check_rfc_volcano_only,check_x_axis_boundary_volcano_only,check_y_axis_spacing_volcano_only,check_adjpvaluecutoff_volcano_only,
-      check_x_axis_spacing_type1_manhattan_box,check_x_axis_spacing_type2_manhattan_box,check_y_axis_spacing_manhattan_box,check_pvaluecutoff_manhattan_box,check_adjpvaluecutoff_manhattan_box,check_vipcutoff_manhattan_box,
-      check_pvaluecutoff_volcano_box,check_lfc_volcano_box,check_rfc_volcano_box,check_x_axis_boundary_volcano_box,check_y_axis_spacing_volcano_box,check_adjpvaluecutoff_volcano_box)
     
-})
+    if(is.na(input$x_axis_spacing_type1_manhattan_only)){
+      closeAlert(session, "x_axis_spacing_type1_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_only_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument can't be empty.", append = TRUE)
+      check_x_axis_spacing_type1_manhattan_only <- FALSE
+    } else if (input$x_axis_spacing_type1_manhattan_only<0 | input$x_axis_spacing_type1_manhattan_only>1000) {
+      closeAlert(session, "x_axis_spacing_type1_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_only_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
+      check_x_axis_spacing_type1_manhattan_only <- FALSE
+    } else {
+      closeAlert(session, "x_axis_spacing_type1_manhattan_only_alert")
+      check_x_axis_spacing_type1_manhattan_only <- TRUE
+    }  
+    
+    if(is.na(input$x_axis_spacing_type2_manhattan_only)){
+      closeAlert(session, "x_axis_spacing_type2_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_only_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument can't be empty.", append = TRUE)
+      check_x_axis_spacing_type2_manhattan_only <- FALSE
+    } else if (input$x_axis_spacing_type2_manhattan_only<0 | input$x_axis_spacing_type2_manhattan_only>1000) {
+      closeAlert(session, "x_axis_spacing_type2_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_only_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
+      check_x_axis_spacing_type2_manhattan_only <- FALSE
+    } else {
+      closeAlert(session, "x_axis_spacing_type2_manhattan_only_alert")
+      check_x_axis_spacing_type2_manhattan_only <- TRUE
+    }
+    
+    if(is.na(input$y_axis_spacing_manhattan_only)){
+      closeAlert(session, "y_axis_spacing_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
+      check_y_axis_spacing_manhattan_only <- FALSE
+    } else if (input$y_axis_spacing_manhattan_only<0 | input$y_axis_spacing_manhattan_only>5) {
+      closeAlert(session, "y_axis_spacing_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5.", append = TRUE)
+      check_y_axis_spacing_manhattan_only <- FALSE
+    } else {
+      closeAlert(session, "y_axis_spacing_manhattan_only_alert")
+      check_y_axis_spacing_manhattan_only <- TRUE
+    }
+    
+    if(is.na(input$pvaluecutoff_manhattan_only)){
+      closeAlert(session, "pvaluecutoff_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument can't be empty.", append = TRUE)
+      check_pvaluecutoff_manhattan_only <- FALSE
+    } else if (input$pvaluecutoff_manhattan_only<0 | input$pvaluecutoff_manhattan_only>1) {
+      closeAlert(session, "pvaluecutoff_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
+      check_pvaluecutoff_manhattan_only <- FALSE
+    } else {
+      closeAlert(session, "pvaluecutoff_manhattan_only_alert")
+      check_pvaluecutoff_manhattan_only <- TRUE
+    }
+    
+    if(is.na(input$adjpvaluecutoff_manhattan_only)){
+      closeAlert(session, "adjpvaluecutoff_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
+      check_adjpvaluecutoff_manhattan_only <- FALSE
+    } else if (input$adjpvaluecutoff_manhattan_only<0 | input$adjpvaluecutoff_manhattan_only>1) {
+      closeAlert(session, "adjpvaluecutoff_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
+      check_adjpvaluecutoff_manhattan_only <- FALSE
+    } else {
+      closeAlert(session, "adjpvaluecutoff_manhattan_only_alert")
+      check_adjpvaluecutoff_manhattan_only <- TRUE
+    }
+    
+    if(is.na(input$vipcutoff_manhattan_only)){
+      closeAlert(session, "vipcutoff_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "vipcutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument can't be empty.", append = TRUE)
+      check_vipcutoff_manhattan_only <- FALSE
+    } else if (input$vipcutoff_manhattan_only<0 | input$vipcutoff_manhattan_only>10) {
+      closeAlert(session, "vipcutoff_manhattan_only_alert")
+      createAlert(session, "alert_interactive", "vipcutoff_manhattan_only_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument should be not smaller than 0 or larger than 10.", append = TRUE)
+      check_vipcutoff_manhattan_only <- FALSE
+    } else {
+      closeAlert(session, "vipcutoff_manhattan_only_alert")
+      check_vipcutoff_manhattan_only <- TRUE
+    }
+    
+    if(is.na(input$pvaluecutoff_volcano_only)){
+      closeAlert(session, "pvaluecutoff_volcano_only_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument can't be empty.", append = TRUE)
+      check_pvaluecutoff_volcano_only <- FALSE
+    } else if (input$pvaluecutoff_volcano_only<0 | input$pvaluecutoff_volcano_only>1) {
+      closeAlert(session, "pvaluecutoff_volcano_only_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
+      check_pvaluecutoff_volcano_only <- FALSE
+    } else {
+      closeAlert(session, "pvaluecutoff_volcano_only_alert")
+      check_pvaluecutoff_volcano_only <- TRUE
+    }
+    
+    if(is.na(input$lfc_volcano_only)){
+      closeAlert(session, "lfc_volcano_only_alert")
+      createAlert(session, "alert_interactive", "lfc_volcano_only_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument can't be empty.", append = TRUE)
+      check_lfc_volcano_only <- FALSE
+    } else if (input$lfc_volcano_only<0 | input$lfc_volcano_only>1) {
+      closeAlert(session, "lfc_volcano_only_alert")
+      createAlert(session, "alert_interactive", "lfc_volcano_only_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument should be not smaller than 0 or larger than 1.", append = TRUE)
+      check_lfc_volcano_only <- FALSE
+    } else {
+      closeAlert(session, "lfc_volcano_only_alert")
+      check_lfc_volcano_only <- TRUE
+    }
+    
+    if(is.na(input$rfc_volcano_only)){
+      closeAlert(session, "rfc_volcano_only_alert")
+      createAlert(session, "alert_interactive", "rfc_volcano_only_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument can't be empty.", append = TRUE)
+      check_rfc_volcano_only <- FALSE
+    } else if (input$rfc_volcano_only<1 | input$rfc_volcano_only>10) {
+      closeAlert(session, "rfc_volcano_only_alert")
+      createAlert(session, "alert_interactive", "rfc_volcano_only_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument should be not smaller than 1 or larger than 10.", append = TRUE)
+      check_rfc_volcano_only <- FALSE
+    } else {
+      closeAlert(session, "rfc_volcano_only_alert")
+      check_rfc_volcano_only <- TRUE
+    }
+    
+    if(is.na(input$x_axis_boundary_volcano_only)){
+      closeAlert(session, "x_axis_boundary_volcano_only_alert")
+      createAlert(session, "alert_interactive", "x_axis_boundary_volcano_only_alert", title = "Argument Input Error", content = "'X axis boundary' argument can't be empty.", append = TRUE)
+      check_x_axis_boundary_volcano_only <- FALSE
+    } else if (input$x_axis_boundary_volcano_only<0 | input$x_axis_boundary_volcano_only>20) {
+      closeAlert(session, "x_axis_boundary_volcano_only_alert")
+      createAlert(session, "alert_interactive", "x_axis_boundary_volcano_only_alert", title = "Argument Input Error", content = "'X axis boundary' argument should be not smaller than 0 or larger than 1.", append = TRUE)
+      check_x_axis_boundary_volcano_only <- FALSE
+    } else {
+      closeAlert(session, "x_axis_boundary_volcano_only_alert")
+      check_x_axis_boundary_volcano_only <- TRUE
+    }
+    
+    if(is.na(input$y_axis_spacing_volcano_only)){
+      closeAlert(session, "y_axis_spacing_volcano_only_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_volcano_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
+      check_y_axis_spacing_volcano_only <- FALSE
+    } else if (input$y_axis_spacing_volcano_only<0 | input$y_axis_spacing_volcano_only>5) {
+      closeAlert(session, "y_axis_spacing_volcano_only_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_volcano_only_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5.", append = TRUE)
+      check_y_axis_spacing_volcano_only <- FALSE
+    } else {
+      closeAlert(session, "y_axis_spacing_volcano_only_alert")
+      check_y_axis_spacing_volcano_only <- TRUE
+    }
+    
+    if(is.na(input$adjpvaluecutoff_volcano_only)){
+      closeAlert(session, "adjpvaluecutoff_volcano_only_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
+      check_adjpvaluecutoff_volcano_only <- FALSE
+    } else if (input$adjpvaluecutoff_volcano_only<0 | input$adjpvaluecutoff_volcano_only>1) {
+      closeAlert(session, "adjpvaluecutoff_volcano_only_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_only_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1.", append = TRUE)
+      check_adjpvaluecutoff_volcano_only <- FALSE
+    } else {
+      closeAlert(session, "adjpvaluecutoff_volcano_only_alert")
+      check_adjpvaluecutoff_volcano_only <- TRUE
+    }
+    
+    if(is.na(input$x_axis_spacing_type1_manhattan_box)){
+      closeAlert(session, "x_axis_spacing_type1_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_box_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument can't be empty.", append = TRUE)
+      check_x_axis_spacing_type1_manhattan_box <- FALSE
+    } else if (input$x_axis_spacing_type1_manhattan_box<0 | input$x_axis_spacing_type1_manhattan_box>1000) {
+      closeAlert(session, "x_axis_spacing_type1_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type1_manhattan_box_alert", title = "Argument Input Error", content = "'Type1 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
+      check_x_axis_spacing_type1_manhattan_box <- FALSE
+    } else {
+      closeAlert(session, "x_axis_spacing_type1_manhattan_box_alert")
+      check_x_axis_spacing_type1_manhattan_box <- TRUE
+    }
+    
+    if(is.na(input$x_axis_spacing_type2_manhattan_box)){
+      closeAlert(session, "x_axis_spacing_type2_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_box_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument can't be empty.", append = TRUE)
+      check_x_axis_spacing_type2_manhattan_box <- FALSE
+    } else if (input$x_axis_spacing_type2_manhattan_box<0 | input$x_axis_spacing_type2_manhattan_box>1000) {
+      closeAlert(session, "x_axis_spacing_type2_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "x_axis_spacing_type2_manhattan_box_alert", title = "Argument Input Error", content = "'Type2 X axis spacing' argument should be not smaller than 0 or larger than 1000.", append = TRUE)
+      check_x_axis_spacing_type2_manhattan_box <- FALSE
+    } else {
+      closeAlert(session, "x_axis_spacing_type2_manhattan_box_alert")
+      check_x_axis_spacing_type2_manhattan_box <- TRUE
+    }
+    
+    if(is.na(input$y_axis_spacing_manhattan_box)){
+      closeAlert(session, "y_axis_spacing_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
+      check_y_axis_spacing_manhattan_box <- FALSE
+    } else if (input$y_axis_spacing_manhattan_box<0 | input$y_axis_spacing_manhattan_box>5) {
+      closeAlert(session, "y_axis_spacing_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5", append = TRUE)
+      check_y_axis_spacing_manhattan_box <- FALSE
+    } else {
+      closeAlert(session, "y_axis_spacing_manhattan_box_alert")
+      check_y_axis_spacing_manhattan_box <- TRUE
+    }
+    
+    if(is.na(input$pvaluecutoff_manhattan_box)){
+      closeAlert(session, "pvaluecutoff_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
+      check_pvaluecutoff_manhattan_box <- FALSE
+    } else if (input$pvaluecutoff_manhattan_box<0 | input$pvaluecutoff_manhattan_box>1) {
+      closeAlert(session, "pvaluecutoff_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 1", append = TRUE)
+      check_pvaluecutoff_manhattan_box <- FALSE
+    } else {
+      closeAlert(session, "pvaluecutoff_manhattan_box_alert")
+      check_pvaluecutoff_manhattan_box <- TRUE
+    }
+    
+    if(is.na(input$adjpvaluecutoff_manhattan_box)){
+      closeAlert(session, "adjpvaluecutoff_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
+      check_adjpvaluecutoff_manhattan_box <- FALSE
+    } else if (input$adjpvaluecutoff_manhattan_box<0 | input$adjpvaluecutoff_manhattan_box>1) {
+      closeAlert(session, "adjpvaluecutoff_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1", append = TRUE)
+      check_adjpvaluecutoff_manhattan_box <- FALSE
+    } else {
+      closeAlert(session, "adjpvaluecutoff_manhattan_box_alert")
+      check_adjpvaluecutoff_manhattan_box <- TRUE
+    }
+    
+    if(is.na(input$vipcutoff_manhattan_box)){
+      closeAlert(session, "vipcutoff_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "vipcutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument can't be empty.", append = TRUE)
+      check_vipcutoff_manhattan_box <- FALSE
+    } else if (input$vipcutoff_manhattan_box<0 | input$vipcutoff_manhattan_box>10) {
+      closeAlert(session, "vipcutoff_manhattan_box_alert")
+      createAlert(session, "alert_interactive", "vipcutoff_manhattan_box_alert", title = "Argument Input Error", content = "'Threshold for VIP' argument should be not smaller than 0 or larger than 10", append = TRUE)
+      check_vipcutoff_manhattan_box <- FALSE
+    } else {
+      closeAlert(session, "vipcutoff_manhattan_box_alert")
+      check_vipcutoff_manhattan_box <- TRUE
+    }
+    
+    if(is.na(input$pvaluecutoff_volcano_box)){
+      closeAlert(session, "pvaluecutoff_volcano_box_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument can't be empty.", append = TRUE)
+      check_pvaluecutoff_volcano_box <- FALSE
+    } else if (input$pvaluecutoff_volcano_box<0 | input$pvaluecutoff_volcano_box>1) {
+      closeAlert(session, "pvaluecutoff_volcano_box_alert")
+      createAlert(session, "alert_interactive", "pvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for p-value' argument should be not smaller than 0 or larger than 1", append = TRUE)
+      check_pvaluecutoff_volcano_box <- FALSE
+    } else {
+      closeAlert(session, "pvaluecutoff_volcano_box_alert")
+      check_pvaluecutoff_volcano_box <- TRUE
+    }
+    
+    if(is.na(input$lfc_volcano_box)){
+      closeAlert(session, "lfc_volcano_box_alert")
+      createAlert(session, "alert_interactive", "lfc_volcano_box_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument can't be empty.", append = TRUE)
+      check_lfc_volcano_box <- FALSE
+    } else if (input$lfc_volcano_box<0 | input$lfc_volcano_box>1) {
+      closeAlert(session, "lfc_volcano_box_alert")
+      createAlert(session, "alert_interactive", "lfc_volcano_box_alert", title = "Argument Input Error", content = "'Left side threshold for fold change' argument should be not smaller than 0 or larger than 1", append = TRUE)
+      check_lfc_volcano_box <- FALSE
+    } else {
+      closeAlert(session, "lfc_volcano_box_alert")
+      check_lfc_volcano_box <- TRUE
+    }
+    
+    if(is.na(input$rfc_volcano_box)){
+      closeAlert(session, "rfc_volcano_box_alert")
+      createAlert(session, "alert_interactive", "rfc_volcano_box_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument can't be empty.", append = TRUE)
+      check_rfc_volcano_box <- FALSE
+    } else if (input$rfc_volcano_box<1 | input$rfc_volcano_box>10) {
+      closeAlert(session, "rfc_volcano_box_alert")
+      createAlert(session, "alert_interactive", "rfc_volcano_box_alert", title = "Argument Input Error", content = "'Right side threshold for fold change' argument should be not smaller than 1 or larger than 10", append = TRUE)
+      check_rfc_volcano_box <- FALSE
+    } else {
+      closeAlert(session, "rfc_volcano_box_alert")
+      check_rfc_volcano_box <- TRUE
+    }
+    
+    if(is.na(input$x_axis_boundary_volcano_box)){
+      closeAlert(session, "x_axis_boundary_volcano_box_alert")
+      createAlert(session, "alert_interactive", "x_axis_boundary_volcano_box_alert", title = "Argument Input Error", content = "'X axis boundary' argument can't be empty.", append = TRUE)
+      check_x_axis_boundary_volcano_box <- FALSE
+    } else if (input$x_axis_boundary_volcano_box<0 | input$x_axis_boundary_volcano_box>20) {
+      closeAlert(session, "x_axis_boundary_volcano_box_alert")
+      createAlert(session, "alert_interactive", "x_axis_boundary_volcano_box_alert", title = "Argument Input Error", content = "'X axis boundary' argument should be not smaller than 0 or larger than 20", append = TRUE)
+      check_x_axis_boundary_volcano_box <- FALSE
+    } else {
+      closeAlert(session, "x_axis_boundary_volcano_box_alert")
+      check_x_axis_boundary_volcano_box <- TRUE
+    }
+    
+    if(is.na(input$y_axis_spacing_volcano_box)){
+      closeAlert(session, "y_axis_spacing_volcano_box_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_volcano_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument can't be empty.", append = TRUE)
+      check_y_axis_spacing_volcano_box <- FALSE
+    } else if (input$y_axis_spacing_volcano_box<0 | input$y_axis_spacing_volcano_box>5) {
+      closeAlert(session, "y_axis_spacing_volcano_box_alert")
+      createAlert(session, "alert_interactive", "y_axis_spacing_volcano_box_alert", title = "Argument Input Error", content = "'Y axis spacing' argument should be not smaller than 0 or larger than 5", append = TRUE)
+      check_y_axis_spacing_volcano_box <- FALSE
+    } else {
+      closeAlert(session, "y_axis_spacing_volcano_box_alert")
+      check_y_axis_spacing_volcano_box <- TRUE
+    }
+    
+    if(is.na(input$adjpvaluecutoff_volcano_box)){
+      closeAlert(session, "adjpvaluecutoff_volcano_box_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument can't be empty.", append = TRUE)
+      check_adjpvaluecutoff_volcano_box <- FALSE
+    } else if (input$adjpvaluecutoff_volcano_box<0 | input$adjpvaluecutoff_volcano_box>1) {
+      closeAlert(session, "adjpvaluecutoff_volcano_box_alert")
+      createAlert(session, "alert_interactive", "adjpvaluecutoff_volcano_box_alert", title = "Argument Input Error", content = "'Threshold for adjusted p-value' argument should be not smaller than 0 or larger than 1", append = TRUE)
+      check_adjpvaluecutoff_volcano_box <- FALSE
+    } else {
+      closeAlert(session, "adjpvaluecutoff_volcano_box_alert")
+      check_adjpvaluecutoff_volcano_box <- TRUE
+    }
+    
+    all(check_input_interactive_single,check_x_axis_spacing_type1_manhattan_only,check_x_axis_spacing_type2_manhattan_only,check_y_axis_spacing_manhattan_only,check_pvaluecutoff_manhattan_only,check_adjpvaluecutoff_manhattan_only,check_vipcutoff_manhattan_only,
+        check_pvaluecutoff_volcano_only,check_lfc_volcano_only,check_rfc_volcano_only,check_x_axis_boundary_volcano_only,check_y_axis_spacing_volcano_only,check_adjpvaluecutoff_volcano_only,
+        check_x_axis_spacing_type1_manhattan_box,check_x_axis_spacing_type2_manhattan_box,check_y_axis_spacing_manhattan_box,check_pvaluecutoff_manhattan_box,check_adjpvaluecutoff_manhattan_box,check_vipcutoff_manhattan_box,
+        check_pvaluecutoff_volcano_box,check_lfc_volcano_box,check_rfc_volcano_box,check_x_axis_boundary_volcano_box,check_y_axis_spacing_volcano_box,check_adjpvaluecutoff_volcano_box)
+    
+  })
   
   
-plot1_single_plot <- reactive({
-  
+  plot1_single_plot <- reactive({
+    
     if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
       
       if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(input_file_interactive()) & all_alert()){
@@ -504,7 +504,7 @@ plot1_single_plot <- reactive({
               manhattan_only = input_file_interactive()
               colnames(manhattan_only) = c('name','log2foldchange','p.value','adjusted.p.value')
             }
-          
+            
             manhattan_only = manhattan_only[grep('_',manhattan_only$name),]
             manhattan_only = manhattan_only %>% separate('name',c("mz","time"),remove=FALSE,sep="_")
             manhattan_only$mz=as.numeric(manhattan_only$mz)
@@ -527,7 +527,7 @@ plot1_single_plot <- reactive({
               adjdashline_manhattan_only <- NULL
             }
             
-      
+            
             if(isolate(input$labelexpression_manhattan_only)=='yes'){
               
               manhattan_only[manhattan_only$p.value<cutoff_manhattan_only & manhattan_only$log2foldchange>0,'color']<- input$poscol_manhattan_only
@@ -542,14 +542,14 @@ plot1_single_plot <- reactive({
             manhattan_only[!(manhattan_only$color== input$insigcol_manhattan_only),'size']=1.5 
             pal_manhattan_only <- levels(factor(manhattan_only$color))
             names(pal_manhattan_only)<-pal_manhattan_only
-              
+            
             xincrement_manhattan_only = isolate(input$x_axis_spacing_type1_manhattan_only)
             xmin_val_manhattan_only <- min(0,manhattan_only$mz)
             xmax_val_manhattan_only <- max(manhattan_only$mz)
             xlabel_manhattan_only <- xlab('mass-to-charge (m/z)')
             maintitle_manhattan_only <- ggtitle('Type 1 manhattan plot (-log10p vs mz)')
             gplotline_manhattan_only <- ggplot(manhattan_only, aes(x=mz, y=-log10(p.value), color=color, text=paste0('mz:',manhattan_only$mz," time:",manhattan_only$time)))
-
+            
             yvec_manhattan_only <- -log10(manhattan_only$p.value)
             if(max(yvec_manhattan_only)>20){yvec_manhattan_only[yvec_manhattan_only>20]<-20}
             ymax_val_manhattan_only <- max(yvec_manhattan_only)
@@ -582,14 +582,14 @@ plot1_single_plot <- reactive({
             manhattan_only[!(manhattan_only$color== input$insigcol_manhattan_only),'size']=1.5
             pal_manhattan_only <- levels(factor(manhattan_only$color))
             names(pal_manhattan_only)<-pal_manhattan_only
-              
+            
             xincrement_manhattan_only = isolate(input$x_axis_spacing_type1_manhattan_only)
             xmin_val_manhattan_only <- min(0,manhattan_only$mz)
             xmax_val_manhattan_only <- max(manhattan_only$mz)
             xlabel_manhattan_only <- xlab('mass-to-charge (m/z)')
             maintitle_manhattan_only <- ggtitle('Type 1 manhattan plot (VIP vs mz)')
             gplotline_manhattan_only <- ggplot(manhattan_only, aes(x=mz, y=VIP, color=color, text=paste0('mz:',manhattan_only$mz," time:",manhattan_only$time)))
-              
+            
             
             yvec_manhattan_only <- manhattan_only$VIP
             if(max(yvec_manhattan_only)>20){yvec_manhattan_only[yvec_manhattan_only>20]<-20}
@@ -663,7 +663,7 @@ plot1_single_plot <- reactive({
             
             volcano_only[volcano_only$log2foldchange > log2(isolate(input$rfc_volcano_only)) & volcano_only$p.value < cutoff_volcano_only, 'color'] <- input$sigcol_volcano_only
             volcano_only[volcano_only$log2foldchange < log2(isolate(input$lfc_volcano_only)) & volcano_only$p.value < cutoff_volcano_only, 'color'] <- input$sigcol_volcano_only
-
+            
           }
           
           volcano_only[is.na(volcano_only$color),'color'] <- input$insigcol_volcano_only
@@ -681,12 +681,12 @@ plot1_single_plot <- reactive({
           }else{
             x_scale_volcano_only <- scale_x_continuous(name="log2(Fold Change)")
           }
-  
+          
           yvec_volcano_only <- -log10(volcano_only$p.value)
           if(max(yvec_volcano_only)>20){yvec_volcano_only[yvec_volcano_only>20]<-20}
           ymax_val_volcano_only <- max(yvec_volcano_only)
           ymax_volcano_only =floor(max(yvec_volcano_only))+1
-
+          
           dashline_volcano_only <- geom_hline(yintercept=-log10(isolate(input$pvaluecutoff_volcano_only)),linetype='dashed',color= input$dashedlinecol_volcano_only)
           
           
@@ -717,12 +717,178 @@ plot1_single_plot <- reactive({
         
       }
       
+    }else{
+      
+      if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
+        
+        if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
+          
+          if(isolate(input$yaxislabel_manhattan_box)=='pvalue'){
+            
+            if(isolate(input$adjdashline_manhattan_box)=='no'){
+              manhattan_box = feat_inte_interactive()
+              colnames(manhattan_box)[1:3] = c('name','log2foldchange','p.value')
+            }else{
+              manhattan_box = feat_inte_interactive()
+              colnames(manhattan_box)[1:4] = c('name','log2foldchange','p.value','adjusted.p.value')
+            }
+            
+            manhattan_box = manhattan_box[grep('_',manhattan_box$name),]
+            manhattan_box = manhattan_box %>% separate('name',c("mz","time"),remove=FALSE,sep="_")
+            manhattan_box$mz=as.numeric(manhattan_box$mz)
+            manhattan_box$time=as.numeric(manhattan_box$time)
+            
+            if(isolate(input$adjdashline_manhattan_box)=='yes'){
+              
+              if(isolate(input$psignif_manhattan_box)=='pvalue'){
+                
+                cutoff_manhattan_box <- isolate(input$pvaluecutoff_manhattan_box)
+              }else{
+                
+                cutoff_manhattan_box <- max(manhattan_box[manhattan_box$p.value<isolate(input$pvaluecutoff_manhattan_box) & manhattan_box$adjusted.p.value<isolate(input$adjpvaluecutoff_manhattan_box),'p.value'])
+              }
+              
+              adjdashline_manhattan_box <- geom_hline(yintercept=-log10(max(manhattan_box[manhattan_box$p.value<isolate(input$pvaluecutoff_manhattan_box) & manhattan_box$adjusted.p.value<isolate(input$adjpvaluecutoff_manhattan_box),'p.value'])),linetype='dotted',color= input$dottedlinecol_manhattan_box)
+            }else{
+              
+              cutoff_manhattan_box <- isolate(input$pvaluecutoff_manhattan_box)
+              adjdashline_manhattan_box <- NULL
+            }
+            
+            
+            if(isolate(input$labelexpression_manhattan_box)=='yes'){
+              
+              manhattan_box[manhattan_box$p.value<cutoff_manhattan_box & manhattan_box$log2foldchange>0,'color']<- input$poscol_manhattan_box
+              manhattan_box[manhattan_box$p.value<cutoff_manhattan_box & manhattan_box$log2foldchange<0,'color']<- input$negcol_manhattan_box
+            }else{
+              
+              manhattan_box[manhattan_box$p.value<cutoff_manhattan_box,'color']<- input$sigcol_manhattan_box
+            }
+            
+            manhattan_box[manhattan_box$p.value>=cutoff_manhattan_box,'color']<- input$insigcol_manhattan_box
+            manhattan_box[manhattan_box$color== input$insigcol_manhattan_box,'size']=0.2    
+            manhattan_box[!(manhattan_box$color== input$insigcol_manhattan_box),'size']=1.5 
+            pal_manhattan_box <- levels(factor(manhattan_box$color))
+            names(pal_manhattan_box)<-pal_manhattan_box
+            
+            if(isolate(input$plottype_manhattan_box)=='type1'){
+              
+              xincrement_manhattan_box = isolate(input$x_axis_spacing_type1_manhattan_box)
+              xmin_val_manhattan_box <- min(0,manhattan_box$mz)
+              xmax_val_manhattan_box <- max(manhattan_box$mz)
+              xlabel_manhattan_box <- xlab('mass-to-charge (m/z)')
+              maintitle_manhattan_box <- ggtitle('Type 1 manhattan plot (-log10p vs mz)')
+              gplotline_manhattan_box <- ggplot(manhattan_box, aes(x=mz, y=-log10(p.value), color=color, text=paste0('mz:',manhattan_box$mz," time:",manhattan_box$time)))
+              
+            }else{
+              
+              xincrement_manhattan_box = isolate(input$x_axis_spacing_type2_manhattan_box)
+              xmin_val_manhattan_box <- min(0,manhattan_box$time)
+              xmax_val_manhattan_box <- max(manhattan_box$time)
+              xlabel_manhattan_box <- xlab('Retention time (s)')
+              maintitle_manhattan_box <- ggtitle('Type 2 manhattan plot (-log10p vs time)')
+              gplotline_manhattan_box <- ggplot(manhattan_box, aes(x=time, y=-log10(p.value), color=color, text=paste0('mz:',manhattan_box$mz," time:",manhattan_box$time)))
+              
+            }
+            
+
+            yvec_manhattan_box <- -log10(manhattan_box$p.value)
+            if(max(yvec_manhattan_box)>20){yvec_manhattan_box[yvec_manhattan_box>20]<-20}
+            ymax_val_manhattan_box <- max(yvec_manhattan_box)
+            ymax_manhattan_box =floor(max(yvec_manhattan_box))+1
+            ylabel_manhattan_box <- ylab('-log10p')
+            
+            dashline_manhattan_box <- geom_hline(yintercept=-log10(isolate(input$pvaluecutoff_manhattan_box)),linetype='dashed',color= input$dashedlinecol_manhattan_box)
+            
+          }else{
+            
+            manhattan_box = feat_inte_interactive()
+            colnames(manhattan_box)[1:3] = c('name','log2foldchange','VIP')
+            manhattan_box=manhattan_box[grep("_",manhattan_box$name),]
+            rownames(manhattan_box)=1:nrow(manhattan_box)
+            manhattan_box = manhattan_box %>% separate(name,c("mz","time"),remove=FALSE,sep="_")
+            manhattan_box$mz=as.numeric(manhattan_box$mz)
+            manhattan_box$time=as.numeric(manhattan_box$time)
+            
+            if(isolate(input$labelexpression_manhattan_box)=='yes'){
+              
+              manhattan_box[manhattan_box$VIP > isolate(input$vipcutoff_manhattan_box) & manhattan_box$log2foldchange>0,'color']<- input$poscol_manhattan_box
+              manhattan_box[manhattan_box$VIP > isolate(input$vipcutoff_manhattan_box) & manhattan_box$log2foldchange<0,'color']<- input$negcol_manhattan_box
+            }else{
+              
+              manhattan_box[manhattan_box$VIP > isolate(input$vipcutoff_manhattan_box),'color']<- input$sigcol_manhattan_box
+            }
+            
+            manhattan_box[manhattan_box$VIP<= isolate(input$vipcutoff_manhattan_box),'color']<- input$insigcol_manhattan_box
+            manhattan_box[manhattan_box$color== input$insigcol_manhattan_box,'size']=0.2
+            manhattan_box[!(manhattan_box$color== input$insigcol_manhattan_box),'size']=1.5
+            pal_manhattan_box <- levels(factor(manhattan_box$color))
+            names(pal_manhattan_box)<-pal_manhattan_box
+            
+            if(isolate(input$plottype_manhattan_box)=='type1'){
+              
+              xincrement_manhattan_box = isolate(input$x_axis_spacing_type1_manhattan_box)
+              xmin_val_manhattan_box <- min(0,manhattan_box$mz)
+              xmax_val_manhattan_box <- max(manhattan_box$mz)
+              xlabel_manhattan_box <- xlab('mass-to-charge (m/z)')
+              maintitle_manhattan_box <- ggtitle('Type 1 manhattan plot (VIP vs mz)')
+              gplotline_manhattan_box <- ggplot(manhattan_box, aes(x=mz, y=VIP, color=color, text=paste0('mz:',manhattan_box$mz," time:",manhattan_box$time)))
+              
+            }else{
+              
+              xincrement_manhattan_box = isolate(input$x_axis_spacing_type2_manhattan_box)
+              xmin_val_manhattan_box <- min(0,manhattan_box$time)
+              xmax_val_manhattan_box <- max(manhattan_box$time)
+              xlabel_manhattan_box <- xlab('Retention time (s)')
+              maintitle_manhattan_box <- ggtitle('Type 2 manhattan plot (VIP vs time)')
+              gplotline_manhattan_box <- ggplot(manhattan_box, aes(x=time, y=VIP, color=color, text=paste0('mz:',manhattan_box$mz," time:",manhattan_box$time)))
+              
+            }
+            
+            yvec_manhattan_box <- manhattan_box$VIP
+            if(max(yvec_manhattan_box)>20){yvec_manhattan_box[yvec_manhattan_box>20]<-20}
+            ymax_val_manhattan_box <- max(yvec_manhattan_box)
+            ymax_manhattan_box =floor(max(yvec_manhattan_box))+1
+            ylabel_manhattan_box <- ylab('VIP')
+            
+            dashline_manhattan_box <- geom_hline(yintercept= isolate(input$vipcutoff_manhattan_box),linetype='dashed',color= input$dashedlinecol_manhattan_box)
+            
+            adjdashline_manhattan_box <- NULL
+            
+          }
+          
+          
+          p1 <- gplotline_manhattan_box +
+            geom_point(show.legend=F,size=manhattan_box$size,alpha=0.7) + 
+            xlabel_manhattan_box + ylabel_manhattan_box +
+            scale_color_manual(values=pal_manhattan_box) +
+            scale_x_continuous(breaks = seq(xmin_val_manhattan_box, xmax_val_manhattan_box, by = xincrement_manhattan_box)) +
+            scale_y_continuous(breaks = seq(0, (ymax_val_manhattan_box + 2), by = isolate(input$y_axis_spacing_manhattan_box)), limits = c(0,ymax_manhattan_box)) +
+            dashline_manhattan_box + adjdashline_manhattan_box +
+            maintitle_manhattan_box +
+            theme(axis.title=element_text(size=12), 
+                  axis.text =element_text(size=10),
+                  axis.text.x = element_text(angle=0),
+                  axis.line = element_blank(),
+                  panel.grid.major = element_blank(),
+                  panel.grid.minor = element_blank(),
+                  panel.background = element_blank(),
+                  panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+                  plot.title = element_text(size=14, hjust = 0.5),
+                  legend.position = "none")
+          
+          p1
+          
+        }
+        
+      }
+      
     }
     
   })
   
   
-plot2_single_plot <- reactive({
+  plot2_single_plot <- reactive({
     
     if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
       
@@ -777,7 +943,7 @@ plot2_single_plot <- reactive({
             manhattan_only[!(manhattan_only$color== input$insigcol_manhattan_only),'size']=1.5
             pal_manhattan_only <- levels(factor(manhattan_only$color))
             names(pal_manhattan_only)<-pal_manhattan_only
-              
+            
             xincrement_manhattan_only = isolate(input$x_axis_spacing_type2_manhattan_only) #round_any(max(manhattan$time)/10,10,f=floor)
             xmin_val_manhattan_only <- min(0,manhattan_only$time)
             xmax_val_manhattan_only <- max(manhattan_only$time)
@@ -863,17 +1029,217 @@ plot2_single_plot <- reactive({
           
           NULL
         }
-        
-        
+      
       }
       
+    }else{
+        
+        if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
+          
+          if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
+            
+            if(!is.null(pplot1())){
+              
+              d <- event_data('plotly_click',source = 'scatterplot')
+              
+              if(!is.null(d)){
+                
+                if(isolate(input$yaxislabel_manhattan_box)=='pvalue'){
+                  
+                  if(isolate(input$adjdashline_manhattan_box)=='no'){
+                    manhattan_box = feat_inte_interactive()
+                    colnames(manhattan_box)[1:3] = c('name','log2foldchange','p.value')
+                  }else{
+                    manhattan_box = feat_inte_interactive()
+                    colnames(manhattan_box)[1:4] = c('name','log2foldchange','p.value','adjusted.p.value')
+                  }
+                  
+                }else{
+                  
+                  manhattan_box = input_file_interactive()
+                  colnames(manhattan_box) = c('name','log2foldchange','VIP')
+                  
+                }
+                
+                manhattan_box=manhattan_box[grep("_",manhattan_box$name),]
+                rownames(manhattan_box)=1:nrow(manhattan_box)
+                
+                x1_manhattan_box <-as.numeric(d['curveNumber']+1);x2_manhattan_box <-as.numeric(d['pointNumber']+1)
+                text_manhattan_box <- pplot1()$x$data[[x1_manhattan_box]]$text[x2_manhattan_box]
+                mz_manhattan_box <- unlist(strsplit(unlist(strsplit(text_manhattan_box,split = ' '))[1],split = ':'))[2]
+                time_manhattan_box <- unlist(strsplit(unlist(strsplit(text_manhattan_box,split = ' '))[2],split = ':'))[2]
+                
+                if(!is.na(mz_manhattan_box) & !is.na(time_manhattan_box)){
+                  
+                  name_manhattan_box  = paste0(mz_manhattan_box,"_",time_manhattan_box)
+                  group_manhattan_box <- names(table(classlabel_inte_interactive()[,2]))
+                  boxplotdata_manhattan_box <- data.frame(matrix(NA,ncol=2,nrow=1))
+                  colnames(boxplotdata_manhattan_box) <- c('group','intensity')
+                  
+                  for(i in 1:length(group_manhattan_box)){
+                    
+                    tmp2_manhattan_box <- as.numeric(manhattan_box[manhattan_box$name==name_manhattan_box,classlabel_inte_interactive()[classlabel_inte_interactive()[,2]==group_manhattan_box[i],1]])
+                    tmp1_manhattan_box <- rep(group_manhattan_box[i],length(tmp2_manhattan_box))
+                    tmpdata_manhattan_box <- cbind(tmp1_manhattan_box,tmp2_manhattan_box)
+                    colnames(tmpdata_manhattan_box) <- c('group','intensity')
+                    boxplotdata_manhattan_box <- rbind(boxplotdata_manhattan_box,tmpdata_manhattan_box)
+                  }
+                  boxplotdata_manhattan_box <- boxplotdata_manhattan_box[-1,]
+                  boxplotdata_manhattan_box$intensity <- as.numeric(boxplotdata_manhattan_box$intensity)
+                  
+                  if(isolate(input$boxplotcolor_manhattan_box)=='yes'){
+                    p2 <- ggboxplot(boxplotdata_manhattan_box, x = "group", y = "intensity", color = "group", bxp.errorbar = TRUE, bxp.errorbar.width=0.5, size = 0.5) +
+                      ggtitle(text_manhattan_box) + ylab('log2(intensity)') +
+                      theme(axis.title=element_text(size=12),
+                            axis.text =element_text(size=10),
+                            axis.text.x = element_text(angle=0),
+                            axis.line = element_blank(),
+                            panel.grid.major = element_blank(),
+                            panel.grid.minor = element_blank(),
+                            panel.background = element_blank(),
+                            panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+                            plot.title = element_text(size=14, hjust = 0.5))
+                  }else{
+                    p2 <- ggboxplot(boxplotdata_manhattan_box, x = "group", y = "intensity", bxp.errorbar = TRUE, bxp.errorbar.width=0.5, size = 0.5) +
+                      ggtitle(text_manhattan_box) + ylab('log2(intensity)') +
+                      theme(axis.title=element_text(size=12),
+                            axis.text =element_text(size=10),
+                            axis.text.x = element_text(angle=0),
+                            axis.line = element_blank(),
+                            panel.grid.major = element_blank(),
+                            panel.grid.minor = element_blank(),
+                            panel.background = element_blank(),
+                            panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+                            plot.title = element_text(size=14, hjust = 0.5))
+                  }
+                  p2
+                  
+                }else{
+                  
+                  NULL
+                }
+                
+              }
+            }
+            
+            
+          }else{
+            
+            
+            NULL
+            
+            
+          }
+          
+        }
     }
     
   })
   
   
+  observeEvent(input$search_mahattan_box,{search_interactive$count=1})
+  
+  
+  plot3_single_plot <- reactive({
+    
+    if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' || isolate(input$choose_graph)=='Volcano Plot with Box Plot'){
+    
+    if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
+      
+      if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
+        
+        if(!is.null(pplot1())){
+          
+          if(input$search_mahattan_box!=0 & search_interactive$count==1){
+            
+            if(!isolate(input$name_mahattan_box)==""){
+            
+              if(isolate(input$yaxislabel_manhattan_box)=='pvalue'){
+                
+                if(isolate(input$adjdashline_manhattan_box)=='no'){
+                  manhattan_box = feat_inte_interactive()
+                  colnames(manhattan_box)[1:3] = c('name','log2foldchange','p.value')
+                }else{
+                  manhattan_box = feat_inte_interactive()
+                  colnames(manhattan_box)[1:4] = c('name','log2foldchange','p.value','adjusted.p.value')
+                }
+                
+              }else{
+                
+                manhattan_box = input_file_interactive()
+                colnames(manhattan_box) = c('name','log2foldchange','VIP')
+                
+              }
+              
+              group_manhattan_box <- names(table(classlabel_inte_interactive()[,2]))
+              boxplotdata_manhattan_box <- data.frame(matrix(NA,ncol=2,nrow=1))
+              colnames(boxplotdata_manhattan_box) <- c('group','intensity')
+              
+              for(i in 1:length(group_manhattan_box)){
+                
+                tmp2_manhattan_box <- as.numeric(manhattan_box[manhattan_box$name==isolate(input$name_mahattan_box),classlabel_inte_interactive()[classlabel_inte_interactive()[,2]==group_manhattan_box[i],1]])
+                tmp1_manhattan_box <- rep(group_manhattan_box[i],length(tmp2_manhattan_box))
+                tmpdata_manhattan_box <- cbind(tmp1_manhattan_box,tmp2_manhattan_box)
+                colnames(tmpdata_manhattan_box) <- c('group','intensity')
+                boxplotdata_manhattan_box <- rbind(boxplotdata_manhattan_box,tmpdata_manhattan_box)
+              }
+              boxplotdata_manhattan_box <- boxplotdata_manhattan_box[-1,]
+              boxplotdata_manhattan_box$intensity <- as.numeric(boxplotdata_manhattan_box$intensity)
+              
+              if(length(grep("_",isolate(input$name_mahattan_box)))>0){
+                
+                text_manhattan_box <- paste('mz:',strsplit(isolate(input$name_mahattan_box),"_")[[1]][1],' time:',strsplit(isolate(input$name_mahattan_box),"_")[[1]][2],sep='')
+              }else{
+                
+                text_manhattan_box <- isolate(input$name_mahattan_box)
+              }
+              
+              if(isolate(input$boxplotcolor_manhattan_box)=='yes'){
+                p3 <- ggboxplot(boxplotdata_manhattan_box, x = "group", y = "intensity", color = "group", bxp.errorbar = TRUE, bxp.errorbar.width=0.5, size = 0.5) +
+                  ggtitle(text_manhattan_box) + ylab('log2(intensity)') +
+                  theme(axis.title=element_text(size=12),
+                        axis.text =element_text(size=10),
+                        axis.text.x = element_text(angle=0),
+                        axis.line = element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        panel.background = element_blank(),
+                        panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+                        plot.title = element_text(size=14, hjust = 0.5))
+              }else{
+                p3 <- ggboxplot(boxplotdata_manhattan_box, x = "group", y = "intensity", bxp.errorbar = TRUE, bxp.errorbar.width=0.5, size = 0.5) +
+                  ggtitle(text_manhattan_box) + ylab('log2(intensity)') +
+                  theme(axis.title=element_text(size=12),
+                        axis.text =element_text(size=10),
+                        axis.text.x = element_text(angle=0),
+                        axis.line = element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        panel.background = element_blank(),
+                        panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+                        plot.title = element_text(size=14, hjust = 0.5))
+              }
+              p3
+              
+            }
+          } 
+        }
+        
+      }else{
+        
+        NULL
+      }
+      
+    }
+    
+    }
+  
+  })
+  
+  
+  
   pplot1 <- reactive({
-
+    
     if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
       
       if(!is.null(plot1_single_plot())){
@@ -885,12 +1251,40 @@ plot2_single_plot <- reactive({
       
     }else{
       
+      if(!is.null(plot1_single_plot())){
+        
+        ggp1 <- ggplotly(plot1_single_plot(),tooltip = c("text"),source="scatterplot") %>% config(displayModeBar = F)
+        ggp1
+        
+      }
       
     }
-  
- 
+    
+    
   })
-
+  
+  
+  observeEvent({if(!is.null(event_data('plotly_click',source = 'scatterplot'))) TRUE else return()},{off_interactive(0)})
+  observeEvent(input$search_mahattan_box,{off_interactive(1)})
+  
+  
+  plot4_single_plot <- reactive({
+    
+    if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
+      
+      if(!is.null(plot3_single_plot()) & off_interactive()==1){
+        plot3_single_plot()
+      }else if(!is.null(plot2_single_plot()) & off_interactive()==0){
+        plot2_single_plot()
+      }else{
+        NULL
+      }
+      
+    }
+    
+  })
+  
+  
   pplot2 <- reactive({
     
     if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
@@ -904,12 +1298,18 @@ plot2_single_plot <- reactive({
       
     }else{
       
+      if(!is.null(plot4_single_plot())){
+        
+        ggp2 <- ggplotly(plot4_single_plot()) %>% config(displayModeBar = F)
+        ggp2   
+      }
       
     }
     
-
+    
   })
-
+  
+  
   output$check_plot_mahattan_only <- reactive({
     
     if(isolate(input$choose_graph)=='Manhattan Plot only' & !is.null(pplot1()) & !is.null(pplot2())){
@@ -934,20 +1334,44 @@ plot2_single_plot <- reactive({
   outputOptions(output, "check_plot_volcano_only", suspendWhenHidden = FALSE)
   
   
+  output$check_plot_mahattan_box1 <- reactive({
+    
+    if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' & !is.null(pplot1()) ){
+      TRUE
+    }else{
+      FALSE
+    }
+    
+  })
+  outputOptions(output, "check_plot_mahattan_box1", suspendWhenHidden = FALSE)
+  
+  output$check_plot_mahattan_box2 <- reactive({
+    
+    if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' & !is.null(pplot2())){
+      TRUE
+    }else{
+      FALSE
+    }
+    
+  })
+  outputOptions(output, "check_plot_mahattan_box2", suspendWhenHidden = FALSE)
+  
+  
+  
   output$interactive_plot <- renderUI({
-
+    
     if(isolate(input$choose_graph)=='Manhattan Plot only' & !is.null(pplot1()) & !is.null(pplot2())){
-
+      
       output$manhattan_only_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
       output$manhattan_only_plot2 <- renderPlotly({if(!is.null(pplot2())){pplot2()}})
-
+      
       column(width=12,
              style='margin-bottom:10px',
-             column(width=6,plotlyOutput("manhattan_only_plot1", width = "400px", height = "400px")),
-             column(width=6,plotlyOutput("manhattan_only_plot2", width = "400px", height = "400px"))
-
+             column(width=6,plotlyOutput("manhattan_only_plot1", width = "480px", height = "400px")),
+             column(width=6,plotlyOutput("manhattan_only_plot2", width = "480px", height = "400px"))
+             
       )
-
+      
     } else if(isolate(input$choose_graph)=='Volcano Plot only' & !is.null(pplot1()) & is.null(pplot2())){
       
       output$volcano_only_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
@@ -958,9 +1382,21 @@ plot2_single_plot <- reactive({
              
       )
       
-    }
-
-
+    } else if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' & !is.null(pplot1()) ){
+      
+      output$manhattan_only_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
+      output$manhattan_only_plot2 <- renderPlotly({if(!is.null(pplot2())){pplot2()}})
+      
+      column(width=12,
+             style='margin-bottom:10px',
+             column(width=6,plotlyOutput("manhattan_only_plot1", width = "480px", height = "400px")),
+             column(width=6,plotlyOutput("manhattan_only_plot2", width = "480px", height = "400px"))
+      
+      )
+    
+  }
+    
+    
   })
   
   
@@ -988,6 +1424,21 @@ plot2_single_plot <- reactive({
     }
   )
   
+  output$downloadPlot1_manhattan_box <- downloadHandler(
+    
+    filename <- "type_manhattan_plot.png",
+    content = function(file) {
+      ggsave(file, plot = plot1_single_plot(), device = "png", width=4, height=4)
+    }
+  )
+  
+  output$downloadPlot2_manhattan_box <- downloadHandler(
+    
+    filename <- "box_plot.png",
+    content = function(file) {
+      ggsave(file, plot = plot4_single_plot(), device = "png", width=4, height=4)
+    }
+  )
   
 } 
 

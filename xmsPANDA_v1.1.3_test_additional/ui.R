@@ -64,7 +64,7 @@ additional_analysis_page <- fluidPage(
                                                  )
                                                ),
                                                column(12,tags$p(style="font-size:15px;font-weight:bold","See the Format of Input File ",tags$a(href="",target="_blank","here")))
-                                          )  
+                                             )  
                                       ),
                                       column(width=4,
                                              style='margin-top:24px',
@@ -98,88 +98,90 @@ additional_analysis_page <- fluidPage(
                                                          condition = "input.yaxislabel_manhattan_only=='vip'",
                                                          column(width=6,numericInput(width="370px","vipcutoff_manhattan_only", "Threshold for VIP  (0-10 limit):", 2, min = 0, max = 10))
                                                        )
-                                                  ),
-                                                  conditionalPanel(
-                                                    condition = "input.choose_graph=='Volcano Plot only'",
-                                                    style="height:400px",
-                                                    column(width=6,numericInput(width="370px","pvaluecutoff_volcano_only","Threshold for p-value  (0-1 limit):", 0.05 , min = 0, max = 1)),
-                                                    column(width=6,selectInput(width="370px","labelexpression_volcano_only","Different colors to distinguish differential expression?",c("yes","no"))),
-                                                    column(width=6,numericInput(width="370px","lfc_volcano_only","Left side threshold for fold change (0-1 limit):", 0.5 , min = 0, max = 0)),
-                                                    column(width=6,numericInput(width="370px","rfc_volcano_only","Right side threshold for fold change  (1-10 limit):", 2 , min = 1, max = 10)),
-                                                    column(width=6,selectInput(width="370px","set_x_boundary_volcano_only","Set the boundary of X axis?",c("no","yes"))),
-                                                    column(width=6,selectInput(width="370px","adjdashline_volcano_only","Draw dotted line for adjusted p-value?",c("no","yes"))),
-                                                    conditionalPanel(
-                                                      condition = "input.set_x_boundary_volcano_only=='yes'",
-                                                      column(width=6,numericInput(width="370px","x_axis_boundary_volcano_only", "X axis boundary (0-20 limit):", 5, min = 0, max = 20))
-                                                    ),
-                                                    column(width=6,numericInput(width="370px","y_axis_spacing_volcano_only", "Y axis spacing (0-5 limit):", 1, min = 0, max = 5)),
-                                                    conditionalPanel(
-                                                      condition = "input.adjdashline_volcano_only=='yes'",
-                                                      column(width=6,selectInput(width="370px","psignif_volcano_only","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.adjdashline_volcano_only=='yes'",
-                                                      column(width=6,numericInput(width="370px","adjpvaluecutoff_volcano_only", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
-                                                    )
-                                                  ),
-                                                  conditionalPanel(
-                                                    condition = "input.choose_graph=='Manhattan Plot with Box Plot'",
-                                                    style="height:400px",
-                                                    column(width=6,selectInput(width="370px","yaxislabel_manhattan_box","Does your data have P-value or VIP?",c("pvalue","vip"))),
-                                                    column(width=6,selectInput(width="370px","plottype_manhattan_box","What type of manhattan plot?",c("type1","type2"))),
-                                                    conditionalPanel(
-                                                      condition = "input.plottype_manhattan_box=='type1'",
-                                                      column(width=6,numericInput(width="370px","x_axis_spacing_type1_manhattan_box", "Type1 X axis spacing (0-1000 limit):", 50, min = 0, max = 1000))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.plottype_manhattan_box=='type2'",
-                                                      column(width=6,numericInput(width="370px","x_axis_spacing_type2_manhattan_box", "Type2 X axis spacing (0-1000 limit):", 50, min = 0, max = 1000))
-                                                    ),
-                                                    column(width=6,numericInput(width="370px","y_axis_spacing_manhattan_box", "Y axis spacing (0-5 limit):", 1, min = 0, max = 5)),
-                                                    conditionalPanel(
-                                                      condition = "input.yaxislabel_manhattan_box=='pvalue'",
-                                                      column(width=6,numericInput(width="370px","pvaluecutoff_manhattan_box", "Threshold for p-value  (0-1 limit):", 0.05, min = 0, max = 1))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.yaxislabel_manhattan_box=='pvalue'",
-                                                      column(width=6,selectInput(width="370px","adjdashline_manhattan_box","Draw dotted line for adjusted p-value?",c("no","yes")))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.adjdashline_manhattan_box=='yes' & input.yaxislabel_manhattan_box=='pvalue'",
-                                                      column(width=6,selectInput(width="370px","psignif_manhattan_box","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.adjdashline_manhattan_box=='yes' & input.yaxislabel_manhattan_box=='pvalue'",
-                                                      column(width=6,numericInput(width="370px","adjpvaluecutoff_manhattan_box", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.yaxislabel_manhattan_box=='vip'",
-                                                      column(width=6,numericInput(width="370px","vipcutoff_manhattan_box", "Threshold for VIP  (0-10 limit):", 2, min = 0, max = 10))
-                                                    )
-                                                  ),
-                                                  conditionalPanel(
-                                                    condition = "input.choose_graph=='Volcano Plot with Box Plot'",
-                                                    style="height:400px",
-                                                    column(width=6,numericInput(width="370px","pvaluecutoff_volcano_box","Threshold for p-value  (0-1 limit):", 0.05 , min = 0, max = 1)),
-                                                    column(width=6,selectInput(width="370px","labelexpression_volcano_box","Different colors to distinguish differential expression?",c("yes","no"))),
-                                                    column(width=6,numericInput(width="370px","lfc_volcano_box","Left side threshold for fold change (0-1 limit):", 0.5 , min = 0, max = 1)),
-                                                    column(width=6,numericInput(width="370px","rfc_volcano_box","Right side threshold for fold change  (1-10 limit):", 2 , min = 1, max = 10)),
-                                                    column(width=6,selectInput(width="370px","set_x_boundary_volcano_box","Set the boundary of X axis?",c("no","yes"))),
-                                                    column(width=6,selectInput(width="370px","adjdashline_volcano_box","Draw dotted line for adjusted p-value?",c("no","yes"))),
-                                                    conditionalPanel(
-                                                      condition = "input.set_x_boundary_volcano_box=='yes'",
-                                                      column(width=6,numericInput(width="370px","x_axis_boundary_volcano_box", "X axis boundary (0-20 limit):", 5, min = 0, max = 20))
-                                                    ),
-                                                    column(width=6,numericInput(width="370px","y_axis_spacing_volcano_box", "Y axis spacing (0-5 limit):", 1, min = 0, max = 5)),
-                                                    conditionalPanel(
-                                                      condition = "input.adjdashline_volcano_box=='yes'",
-                                                      column(width=6,selectInput(width="370px","psignif_volcano_box","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.adjdashline_volcano_box=='yes'",
-                                                      column(width=6,numericInput(width="370px","adjpvaluecutoff_volcano_box", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
-                                                    )
-                                                  )
+                                                     ),
+                                                     conditionalPanel(
+                                                       condition = "input.choose_graph=='Volcano Plot only'",
+                                                       style="height:400px",
+                                                       column(width=6,numericInput(width="370px","pvaluecutoff_volcano_only","Threshold for p-value  (0-1 limit):", 0.05 , min = 0, max = 1)),
+                                                       column(width=6,selectInput(width="370px","labelexpression_volcano_only","Different colors to distinguish differential expression?",c("yes","no"))),
+                                                       column(width=6,numericInput(width="370px","lfc_volcano_only","Left side threshold for fold change (0-1 limit):", 0.5 , min = 0, max = 0)),
+                                                       column(width=6,numericInput(width="370px","rfc_volcano_only","Right side threshold for fold change  (1-10 limit):", 2 , min = 1, max = 10)),
+                                                       column(width=6,selectInput(width="370px","set_x_boundary_volcano_only","Set the boundary of X axis?",c("no","yes"))),
+                                                       column(width=6,selectInput(width="370px","adjdashline_volcano_only","Draw dotted line for adjusted p-value?",c("no","yes"))),
+                                                       conditionalPanel(
+                                                         condition = "input.set_x_boundary_volcano_only=='yes'",
+                                                         column(width=6,numericInput(width="370px","x_axis_boundary_volcano_only", "X axis boundary (0-20 limit):", 5, min = 0, max = 20))
+                                                       ),
+                                                       column(width=6,numericInput(width="370px","y_axis_spacing_volcano_only", "Y axis spacing (0-5 limit):", 1, min = 0, max = 5)),
+                                                       conditionalPanel(
+                                                         condition = "input.adjdashline_volcano_only=='yes'",
+                                                         column(width=6,selectInput(width="370px","psignif_volcano_only","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.adjdashline_volcano_only=='yes'",
+                                                         column(width=6,numericInput(width="370px","adjpvaluecutoff_volcano_only", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
+                                                       )
+                                                     ),
+                                                     conditionalPanel(
+                                                       condition = "input.choose_graph=='Manhattan Plot with Box Plot'",
+                                                       style="height:400px",
+                                                       column(width=6,selectInput(width="370px","yaxislabel_manhattan_box","Does your data have P-value or VIP?",c("pvalue","vip"))),
+                                                       column(width=6,selectInput(width="370px","plottype_manhattan_box","What type of manhattan plot?",c("type1","type2"))),
+                                                       conditionalPanel(
+                                                         condition = "input.plottype_manhattan_box=='type1'",
+                                                         column(width=6,numericInput(width="370px","x_axis_spacing_type1_manhattan_box", "Type1 X axis spacing (0-1000 limit):", 50, min = 0, max = 1000))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.plottype_manhattan_box=='type2'",
+                                                         column(width=6,numericInput(width="370px","x_axis_spacing_type2_manhattan_box", "Type2 X axis spacing (0-1000 limit):", 50, min = 0, max = 1000))
+                                                       ),
+                                                       column(width=6,numericInput(width="370px","y_axis_spacing_manhattan_box", "Y axis spacing (0-5 limit):", 1, min = 0, max = 5)),
+                                                       column(width=6,selectInput(width="370px","labelexpression_manhattan_box","Different colors to distinguish differential expression?",c("yes","no"))),
+                                                       conditionalPanel(
+                                                         condition = "input.yaxislabel_manhattan_box=='pvalue'",
+                                                         column(width=6,selectInput(width="370px","adjdashline_manhattan_box","Draw dotted line for adjusted p-value?",c("no","yes")))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.yaxislabel_manhattan_box=='pvalue'",
+                                                         column(width=6,numericInput(width="370px","pvaluecutoff_manhattan_box", "Threshold for p-value  (0-1 limit):", 0.05, min = 0, max = 1))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.adjdashline_manhattan_box=='yes' & input.yaxislabel_manhattan_box=='pvalue'",
+                                                         column(width=6,numericInput(width="370px","adjpvaluecutoff_manhattan_box", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.yaxislabel_manhattan_box=='vip'",
+                                                         column(width=6,numericInput(width="370px","vipcutoff_manhattan_box", "Threshold for VIP  (0-10 limit):", 2, min = 0, max = 10))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.adjdashline_manhattan_box=='yes' & input.yaxislabel_manhattan_box=='pvalue'",
+                                                         column(width=6,selectInput(width="370px","psignif_manhattan_box","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
+                                                       ),
+                                                       column(width=6,selectInput(width="350px","boxplotcolor_manhattan_box","Is boxplot colored?",c("yes","no")))
+                                                     ),
+                                                     conditionalPanel(
+                                                       condition = "input.choose_graph=='Volcano Plot with Box Plot'",
+                                                       style="height:400px",
+                                                       column(width=6,numericInput(width="370px","pvaluecutoff_volcano_box","Threshold for p-value  (0-1 limit):", 0.05 , min = 0, max = 1)),
+                                                       column(width=6,selectInput(width="370px","labelexpression_volcano_box","Different colors to distinguish differential expression?",c("yes","no"))),
+                                                       column(width=6,numericInput(width="370px","lfc_volcano_box","Left side threshold for fold change (0-1 limit):", 0.5 , min = 0, max = 1)),
+                                                       column(width=6,numericInput(width="370px","rfc_volcano_box","Right side threshold for fold change  (1-10 limit):", 2 , min = 1, max = 10)),
+                                                       column(width=6,selectInput(width="370px","set_x_boundary_volcano_box","Set the boundary of X axis?",c("no","yes"))),
+                                                       column(width=6,selectInput(width="370px","adjdashline_volcano_box","Draw dotted line for adjusted p-value?",c("no","yes"))),
+                                                       conditionalPanel(
+                                                         condition = "input.set_x_boundary_volcano_box=='yes'",
+                                                         column(width=6,numericInput(width="370px","x_axis_boundary_volcano_box", "X axis boundary (0-20 limit):", 5, min = 0, max = 20))
+                                                       ),
+                                                       column(width=6,numericInput(width="370px","y_axis_spacing_volcano_box", "Y axis spacing (0-5 limit):", 1, min = 0, max = 5)),
+                                                       conditionalPanel(
+                                                         condition = "input.adjdashline_volcano_box=='yes'",
+                                                         column(width=6,selectInput(width="370px","psignif_volcano_box","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
+                                                       ),
+                                                       conditionalPanel(
+                                                         condition = "input.adjdashline_volcano_box=='yes'",
+                                                         column(width=6,numericInput(width="370px","adjpvaluecutoff_volcano_box", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
+                                                       )
+                                                     )
                                              ),
                                              actionButton("start1_interactive","Start processing",icon=icon("play-circle"))
                                       )
@@ -197,20 +199,20 @@ additional_analysis_page <- fluidPage(
                                                                       tags$div(
                                                                         width=12,
                                                                         style='text-align:left;height:250px;',
-                                                                          column(width=6,colourpicker::colourInput("insigcol_manhattan_only", "Insignificant points:", "black", showColour = "background")),
-                                                                          column(width=6,colourpicker::colourInput("dashedlinecol_manhattan_only", "Dashed line for p-value/vip:", "blue", showColour = "background")),
-                                                                          column(width=6,conditionalPanel(condition = "input.adjdashline_manhattan_only=='yes' & input.yaxislabel_manhattan_only=='pvalue'",
-                                                                                                          colourpicker::colourInput("dottedlinecol_manhattan_only", "Dotted line for adjusted p-value:", "green", showColour = "background")
-                                                                          )),                             
-                                                                          column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_only=='no'",
-                                                                                                          colourpicker::colourInput("sigcol_manhattan_only", "Significant points:", "red", showColour = "background")
-                                                                          )),
-                                                                          column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_only=='yes'",
-                                                                                                          colourpicker::colourInput("poscol_manhattan_only", "Positive significant points:", "red", showColour = "background")
-                                                                          )),
-                                                                          column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_only=='yes'",
-                                                                                                          colourpicker::colourInput("negcol_manhattan_only", "Negative significant points:", "blue", showColour = "background")
-                                                                          ))
+                                                                        column(width=6,colourpicker::colourInput("insigcol_manhattan_only", "Insignificant points:", "black", showColour = "background")),
+                                                                        column(width=6,colourpicker::colourInput("dashedlinecol_manhattan_only", "Dashed line for p-value/vip:", "blue", showColour = "background")),
+                                                                        column(width=6,conditionalPanel(condition = "input.adjdashline_manhattan_only=='yes' & input.yaxislabel_manhattan_only=='pvalue'",
+                                                                                                        colourpicker::colourInput("dottedlinecol_manhattan_only", "Dotted line for adjusted p-value:", "green", showColour = "background")
+                                                                        )),                             
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_only=='no'",
+                                                                                                        colourpicker::colourInput("sigcol_manhattan_only", "Significant points:", "red", showColour = "background")
+                                                                        )),
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_only=='yes'",
+                                                                                                        colourpicker::colourInput("poscol_manhattan_only", "Positive significant points:", "red", showColour = "background")
+                                                                        )),
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_only=='yes'",
+                                                                                                        colourpicker::colourInput("negcol_manhattan_only", "Negative significant points:", "blue", showColour = "background")
+                                                                        ))
                                                                       )
                                                               )),
                                              conditionalPanel(condition = "output.check_plot_volcano_only",
@@ -237,6 +239,34 @@ additional_analysis_page <- fluidPage(
                                                                         ))
                                                                       )
                                                               ))
+                                      ),
+                                      column(width=6,
+                                             style='text-align:center',
+                                             conditionalPanel(condition = "output.check_plot_mahattan_box1",
+                                                              "Name: ",tags$input(id='name_mahattan_box',type='text',style='width:120px;height:30px'),
+                                                              bsTooltip("name_mahattan_box", "eg. '132.07675_102.12' for metabolite with mz:132.07675 and time:102.12 or 'Lysine'","bottom"),
+                                                              actionButton("search_mahattan_box","Search",icon=icon("search")),
+                                                              actionButton("colorbutton_mahattan_box", "Select Color"),
+                                                              bsModal("coloroptions_mahattan_box", "Colors for scatter plot", "colorbutton_mahattan_box", size = "large",
+                                                                      tags$div(
+                                                                        width=12,
+                                                                        style='text-align:left;height:250px;',
+                                                                        column(width=6,colourpicker::colourInput("insigcol_manhattan_box", "Insignificant points:", "black", showColour = "background")),
+                                                                        column(width=6,colourpicker::colourInput("dashedlinecol_manhattan_box", "Dashed line for p-value/vip:", "blue", showColour = "background")),
+                                                                        column(width=6,conditionalPanel(condition = "input.adjdashline_manhattan_box=='yes' & input.yaxislabel_manhattan_box=='pvalue'",
+                                                                                                        colourpicker::colourInput("dottedlinecol_manhattan_box", "Dotted line for adjusted p-value:", "green", showColour = "background")
+                                                                        )),                             
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_box=='no'",
+                                                                                                        colourpicker::colourInput("sigcol_manhattan_box", "Significant points:", "red", showColour = "background")
+                                                                        )),
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_box=='yes'",
+                                                                                                        colourpicker::colourInput("poscol_manhattan_box", "Positive significant points:", "red", showColour = "background")
+                                                                        )),
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_manhattan_box=='yes'",
+                                                                                                        colourpicker::colourInput("negcol_manhattan_box", "Negative significant points:", "blue", showColour = "background")
+                                                                        ))
+                                                                      )
+                                                              ))
                                       )
                                ),
                                column(width=12,
@@ -257,10 +287,21 @@ additional_analysis_page <- fluidPage(
                                              conditionalPanel(condition = "output.check_plot_volcano_only",
                                                               downloadButton("downloadPlot1_volcano_vonly", label = "Download volcano plot", style='color: #fff; background-color: #337ab7'))
                                              
+                                      ),
+                                      column(width=6,
+                                             style='text-align:center',
+                                             conditionalPanel(condition = "output.check_plot_mahattan_box1",
+                                                              downloadButton("downloadPlot1_manhattan_box", label = "Download manhattan plot", style='color: #fff; background-color: #337ab7'))
+                                             
+                                      ),
+                                      column(width=6,
+                                             style='text-align:center',
+                                             conditionalPanel(condition = "output.check_plot_mahattan_box2",
+                                                              downloadButton("downloadPlot2_manhattan_box", label = "Download box plot", style='color: #fff; background-color: #337ab7'))
                                       )
                                ),
                                style='primary'
-                                      ),
+               ),
                bsCollapsePanel("Functional Class Scoring",
                                column(width=12,
                                       column(width=6, 
