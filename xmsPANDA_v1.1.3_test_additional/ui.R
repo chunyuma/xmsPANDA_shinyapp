@@ -9,6 +9,7 @@ library(colourpicker)
 library(R.utils)
 library(shinyWidgets)
 library(tidyr)
+library(stringr)
 
 # Define UI for data upload app ----
 
@@ -157,7 +158,7 @@ additional_analysis_page <- fluidPage(
                                                          condition = "input.adjdashline_manhattan_box=='yes' & input.yaxislabel_manhattan_box=='pvalue'",
                                                          column(width=6,selectInput(width="370px","psignif_manhattan_box","Based on which p-value to define significance?",c("pvalue","adjustedpvalue")))
                                                        ),
-                                                       column(width=6,selectInput(width="350px","boxplotcolor_manhattan_box","Is boxplot colored?",c("yes","no")))
+                                                       column(width=6,selectInput(width="370px","boxplotcolor_manhattan_box","Is boxplot colored?",c("yes","no")))
                                                      ),
                                                      conditionalPanel(
                                                        condition = "input.choose_graph=='Volcano Plot with Box Plot'",
@@ -180,7 +181,8 @@ additional_analysis_page <- fluidPage(
                                                        conditionalPanel(
                                                          condition = "input.adjdashline_volcano_box=='yes'",
                                                          column(width=6,numericInput(width="370px","adjpvaluecutoff_volcano_box", "Threshold for adjusted p-value  (0-1 limit):", 0.2, min = 0, max = 1))
-                                                       )
+                                                       ),
+                                                       column(width=6,selectInput(width="370px","boxplotcolor_volcano_box","Is boxplot colored?",c("yes","no")))
                                                      )
                                              ),
                                              actionButton("start1_interactive","Start processing",icon=icon("play-circle"))
@@ -193,9 +195,9 @@ additional_analysis_page <- fluidPage(
                                       style='margin-bottom:10px',
                                       column(width=12,
                                              style='text-align:center',
-                                             conditionalPanel(condition = "output.check_plot_mahattan_only",
-                                                              actionButton("colorbutton_mahattan_only", "Select Color"),
-                                                              bsModal("coloroptions_mahattan_only", "Colors for scatter plot", "colorbutton_mahattan_only", size = "large",
+                                             conditionalPanel(condition = "output.check_plot_manhattan_only",
+                                                              actionButton("colorbutton_manhattan_only", "Select Color"),
+                                                              bsModal("coloroptions_manhattan_only", "Colors for scatter plot", "colorbutton_manhattan_only", size = "large",
                                                                       tags$div(
                                                                         width=12,
                                                                         style='text-align:left;height:250px;',
@@ -242,12 +244,12 @@ additional_analysis_page <- fluidPage(
                                       ),
                                       column(width=6,
                                              style='text-align:center',
-                                             conditionalPanel(condition = "output.check_plot_mahattan_box1",
-                                                              "Name: ",tags$input(id='name_mahattan_box',type='text',style='width:120px;height:30px'),
-                                                              bsTooltip("name_mahattan_box", "eg. '132.07675_102.12' for metabolite with mz:132.07675 and time:102.12 or 'Lysine'","bottom"),
-                                                              actionButton("search_mahattan_box","Search",icon=icon("search")),
-                                                              actionButton("colorbutton_mahattan_box", "Select Color"),
-                                                              bsModal("coloroptions_mahattan_box", "Colors for scatter plot", "colorbutton_mahattan_box", size = "large",
+                                             conditionalPanel(condition = "output.check_plot_manhattan_box1",
+                                                              "Name: ",tags$input(id='name_manhattan_box',type='text',style='width:120px;height:30px'),
+                                                              bsTooltip("name_manhattan_box", "eg. '132.07675_102.12' for metabolite with mz:132.07675 and time:102.12 or 'Lysine'","bottom"),
+                                                              actionButton("search_manhattan_box","Search",icon=icon("search")),
+                                                              actionButton("colorbutton_manhattan_box", "Select Color"),
+                                                              bsModal("coloroptions_manhattan_box", "Colors for scatter plot", "colorbutton_manhattan_box", size = "large",
                                                                       tags$div(
                                                                         width=12,
                                                                         style='text-align:left;height:250px;',
@@ -266,20 +268,93 @@ additional_analysis_page <- fluidPage(
                                                                                                         colourpicker::colourInput("negcol_manhattan_box", "Negative significant points:", "blue", showColour = "background")
                                                                         ))
                                                                       )
+                                                              )),
+                                             conditionalPanel(condition = "output.check_plot_volcano_box1",
+                                                              "Name: ",tags$input(id='name_volcano_box',type='text',style='width:120px;height:30px'),
+                                                              bsTooltip("name_volcano_box", "eg. '132.07675_102.12' for metabolite with mz:132.07675 and time:102.12 or 'Lysine'","bottom"),
+                                                              actionButton("search_volcano_box","Search",icon=icon("search")),
+                                                              actionButton("colorbutton_volcano_box", "Select Color"),
+                                                              bsModal("coloroptions_volcano_box", "Colors for scatter plot", "colorbutton_volcano_box", size = "large",
+                                                                      tags$div(
+                                                                        width=12,
+                                                                        style='text-align:left;height:250px;',
+                                                                        column(width=6,colourpicker::colourInput("insigcol_volcano_box", "Insignificant points:", "black", showColour = "background")),
+                                                                        column(width=6,colourpicker::colourInput("dashedlinecol_volcano_box", "Dashed line for p-value/vip:", "blue", showColour = "background")),
+                                                                        column(width=6,colourpicker::colourInput("lfcdashed_volcano_box", "Left side dashed line:", "red", showColour = "background")),
+                                                                        column(width=6,colourpicker::colourInput("rfcdashed_volcano_box", "Right side dashed line:", "red", showColour = "background")),
+                                                                        column(width=6,conditionalPanel(condition = "input.adjdashline_volcano_box=='yes'",
+                                                                                                        colourpicker::colourInput("dottedlinecol_volcano_box", "Dotted line for adjusted p-value:", "green", showColour = "background")
+                                                                        )),                             
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_volcano_box=='no'",
+                                                                                                        colourpicker::colourInput("sigcol_volcano_box", "Significant points:", "red", showColour = "background")
+                                                                        )),
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_volcano_box=='yes'",
+                                                                                                        colourpicker::colourInput("poscol_volcano_box", "Positive significant points:", "red", showColour = "background")
+                                                                        )),
+                                                                        column(width=6,conditionalPanel(condition = "input.labelexpression_volcano_box=='yes'",
+                                                                                                        colourpicker::colourInput("negcol_volcano_box", "Negative significant points:", "blue", showColour = "background")
+                                                                        ))
+                                                                      )
                                                               ))
+                                      ),
+                                      column(width=6,
+                                             conditionalPanel(condition = "output.check_plot_manhattan_box2_1",
+                                                              style='text-align:center;padding-right:55px',
+                                                              actionButton("change_manhattan_box_1","Change Label"),
+                                                              bsModal("axisoptions_manhattan_box_1", "Change label for the axes of Box plot ", "change_manhattan_box_1", size = "large",
+                                                                      tags$div(
+                                                                        style='text-align:left;height:80px;',
+                                                                        column(width=6,textInput(width="370px","xaxis_name_manhattan_box_1", "X axis Label:","",placeholder="Default: group")),
+                                                                        column(width=6,textInput(width="370px","yaxis_name_manhattan_box_1", "Y axis Label:","",placeholder="Default: intensity"))
+                                                                      )
+                                                              )
+                                             ),
+                                             conditionalPanel(condition = "output.check_plot_manhattan_box2_2",
+                                                              style='text-align:center;padding-left:55px',
+                                                              actionButton("change_manhattan_box_2","Change Label"),
+                                                              bsModal("axisoptions_manhattan_box_2", "Change label for the axes of Box plot ", "change_manhattan_box_2", size = "large",
+                                                                      tags$div(
+                                                                        style='text-align:left;height:80px;',
+                                                                        column(width=6,textInput(width="370px","xaxis_name_manhattan_box_2", "X axis Label:","",placeholder="Default: group")),
+                                                                        column(width=6,textInput(width="370px","yaxis_name_manhattan_box_2", "Y axis Label:","",placeholder="Default: intensity"))
+                                                                      )
+                                                              )
+                                             ),
+                                               conditionalPanel(condition = "output.check_plot_volcano_box2_1",
+                                                                style='text-align:center;padding-right:55px',
+                                                                actionButton("change_volcano_box_1","Change Label"),
+                                                                bsModal("axisoptions_volcano_box_1", "Change label for the axes of Box plot ", "change_volcano_box_1", size = "large",
+                                                                        tags$div(
+                                                                          style='text-align:left;height:80px;',
+                                                                          column(width=6,textInput(width="370px","xaxis_name_volcano_box_1", "X axis Label:","",placeholder="Default: group")),
+                                                                          column(width=6,textInput(width="370px","yaxis_name_volcano_box_1", "Y axis Label:","",placeholder="Default: intensity"))
+                                                                        )
+                                                                )
+                                               ),
+                                               conditionalPanel(condition = "output.check_plot_volcano_box2_2",
+                                                                style='text-align:center;padding-left:55px',
+                                                                actionButton("change_volcano_box_2","Change Label"),
+                                                                bsModal("axisoptions_volcano_box_2", "Change label for the axes of Box plot ", "change_volcano_box_2", size = "large",
+                                                                        tags$div(
+                                                                          style='text-align:left;height:80px;',
+                                                                          column(width=6,textInput(width="370px","xaxis_name_volcano_box_2", "X axis Label:","",placeholder="Default: group")),
+                                                                          column(width=6,textInput(width="370px","yaxis_name_volcano_box_2", "Y axis Label:","",placeholder="Default: intensity"))
+                                                                        )
+                                                                )
+                                               )
                                       )
                                ),
                                column(width=12,
                                       style='margin-bottom:10px',
                                       column(width=6,
                                              style='text-align:center',
-                                             conditionalPanel(condition = "output.check_plot_mahattan_only",
+                                             conditionalPanel(condition = "output.check_plot_manhattan_only",
                                                               downloadButton("downloadPlot1_manhattan_only", label = "Download type1 manhattan plot", style='color: #fff; background-color: #337ab7'))
                                              
                                       ),
                                       column(width=6,
                                              style='text-align:center',
-                                             conditionalPanel(condition = "output.check_plot_mahattan_only",
+                                             conditionalPanel(condition = "output.check_plot_manhattan_only",
                                                               downloadButton("downloadPlot2_manhattan_only", label = "Download type2 manhattan plot", style='color: #fff; background-color: #337ab7'))
                                       ),
                                       column(width=12,
@@ -290,14 +365,35 @@ additional_analysis_page <- fluidPage(
                                       ),
                                       column(width=6,
                                              style='text-align:center',
-                                             conditionalPanel(condition = "output.check_plot_mahattan_box1",
+                                             conditionalPanel(condition = "output.check_plot_manhattan_box1",
                                                               downloadButton("downloadPlot1_manhattan_box", label = "Download manhattan plot", style='color: #fff; background-color: #337ab7'))
                                              
                                       ),
                                       column(width=6,
+                                             conditionalPanel(condition = "output.check_plot_manhattan_box2_1",
+                                                              style='text-align:center;padding-right:55px',
+                                                              downloadButton("downloadPlot2_1_manhattan_box", label = "Download box plot", style='color: #fff; background-color: #337ab7')
+                                            ),
+                                            conditionalPanel(condition = "output.check_plot_manhattan_box2_2",
+                                                             style='text-align:center;padding-left:55px',
+                                                             downloadButton("downloadPlot2_2_manhattan_box", label = "Download box plot", style='color: #fff; background-color: #337ab7')
+                                            )
+                                      ),
+                                      column(width=6,
                                              style='text-align:center',
-                                             conditionalPanel(condition = "output.check_plot_mahattan_box2",
-                                                              downloadButton("downloadPlot2_manhattan_box", label = "Download box plot", style='color: #fff; background-color: #337ab7'))
+                                             conditionalPanel(condition = "output.check_plot_volcano_box1",
+                                                              downloadButton("downloadPlot1_volcano_box", label = "Download volcano plot", style='color: #fff; background-color: #337ab7'))
+                                             
+                                      ),
+                                      column(width=6,
+                                             conditionalPanel(condition = "output.check_plot_volcano_box2_1",
+                                                              style='text-align:center;padding-right:55px',
+                                                              downloadButton("downloadPlot2_1_volcano_box", label = "Download box plot", style='color: #fff; background-color: #337ab7')
+                                             ),
+                                             conditionalPanel(condition = "output.check_plot_volcano_box2_2",
+                                                              style='text-align:center;padding-left:55px',
+                                                              downloadButton("downloadPlot2_2_volcano_box", label = "Download box plot", style='color: #fff; background-color: #337ab7')
+                                             )
                                       )
                                ),
                                style='primary'

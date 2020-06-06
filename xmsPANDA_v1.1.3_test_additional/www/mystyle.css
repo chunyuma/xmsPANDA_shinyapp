@@ -93,5 +93,28 @@ hr {
   margin: 0 auto;
 }
 
+#manhattan_box_plot1 {
+  margin: 0 auto;
+}
 
+#manhattan_box_plot2 {
+  margin: 0 auto;
+}
 
+#volcano_box_plot1 {
+  margin: 0 auto;
+}
+
+#volcano_box_plot2 {
+  margin: 0 auto;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+tr:nth-child(even) {background-color: #f2f2f2;}
