@@ -402,19 +402,19 @@ additional_analysis_page <- fluidPage(
                                column(width=12,
                                       column(width=6, 
                                              id="inputarea",
-                                             fileInput("clusterinput", "Select your target metabolite data ('.csv' or .txt')",
+                                             fileInput("clusterinput_fcs", "Select your target metabolite data ('.csv' or .txt')",
                                                        multiple = FALSE,
                                                        width="350px",
                                                        accept = c("text/csv","text/comma-separated-values,text/plain",".txt"))
                                       ),
                                       column(width=6,
                                              style='margin-top:24px',
-                                             actionButton("optionbutton2", "More options"),
-                                             bsModal("moreoptions2", "More options for analysis", "optionbutton2", size = "large",
+                                             actionButton("optionbutton_fcs", "More options"),
+                                             bsModal("moreoptions_fcs", "More options for analysis", "optionbutton_fcs", size = "large",
                                                      tags$div(
                                                        width=12,
                                                        style="height:300px",
-                                                       column(width=6,selectInput(width="350px","kegg_species_code","Select a species:",c("Homo sapiens(default)",
+                                                       column(width=6,selectInput(width="350px","kegg_species_code_fcs","Select a species:",c("Homo sapiens(default)",
                                                                                                                                           "Mus musculus",
                                                                                                                                           "Pan troglodytes",
                                                                                                                                           "Macaca mulatta",
@@ -423,18 +423,18 @@ additional_analysis_page <- fluidPage(
                                                                                                                                           "Danio rerio",
                                                                                                                                           "C. elegans",
                                                                                                                                           "Drosophila melanogaster"))),
-                                                       column(width=6,selectInput(width="350px","database","Select a KEGG database:",c("pathway(default)","module"))),
-                                                       column(width=6,selectInput(width="350px","type.statistic","Statistic type is p-value?",c("TRUE","FALSE")))
+                                                       column(width=6,selectInput(width="350px","database_fcs","Select a KEGG database:",c("pathway(default)","module"))),
+                                                       column(width=6,selectInput(width="350px","type.statistic_fcs","Statistic type is p-value?",c("TRUE","FALSE")))
                                                        
                                                      )
                                              ),
-                                             actionButton("start2","Start processing",icon=icon("play-circle"))
+                                             actionButton("start_fcs","Start processing",icon=icon("play-circle"))
                                       )
                                ),
-                               column(width=12,verbatimTextOutput("nText4")),
-                               column(width=12,verbatimTextOutput("nText5")),
+                               column(width=12,verbatimTextOutput("nText_fcs1")),
+                               column(width=12,verbatimTextOutput("nText_fcs2")),
                                column(width=12,style="padding-left:25px;padding-right:25px;",
-                                      conditionalPanel(condition = "!output.checktable1",
+                                      conditionalPanel(condition = "!output.checktable_fcs",
                                                        tags$div(tags$h5(style='font-weight:bold',"Input File Format:")),
                                                        tags$p(style='font-weight:bold',"The input file should have two columns: 1. KEGG ID; 2. Statistic (p-value,vip,beta coefficient,fold change)"),
                                                        tags$p(style='font-weight:bold',"Example:"),
@@ -446,27 +446,26 @@ additional_analysis_page <- fluidPage(
                                       )
                                ),                        
                                column(width=12,
-                                      conditionalPanel(condition = "output.checktable1",
-                                                       uiOutput("downloadbutton"),
-                                                       DTOutput('pathwaytb')          
+                                      conditionalPanel(condition = "output.checktable_fcs",
+                                                       uiOutput("downloadbutton_fcs"),
+                                                       DTOutput('pathwaytb_fcs')          
                                       )
-                                      #tableOutput('pathwaytb')
+                                      
                                ),
-                               #column(width=12,verbatimTextOutput('hover')),
                                style='primary'
                ),
                bsCollapsePanel("Metabolite Quantification Analysis",
                                column(width=12,
                                       column(width=4,
                                              id="inputarea",
-                                             fileInput("featuretable_file", "Select feature table file ('.csv' or .txt', 100MB limit)",
+                                             fileInput("feat_inte_mqa", "Select feature table file ('.csv' or .txt', 100MB limit)",
                                                        multiple = FALSE,
                                                        width="350px",
                                                        accept = c("text/csv","text/comma-separated-values,text/plain",".txt"))
                                       ),
                                       column(width=4,
                                              id="inputarea",
-                                             fileInput("classlabel_file", "Select class label file ('.csv' or '.txt')",
+                                             fileInput("classlabel_inte_mqa", "Select class label file ('.csv' or '.txt')",
                                                        multiple = FALSE,
                                                        width="350px",
                                                        accept = c("text/csv",
@@ -475,14 +474,14 @@ additional_analysis_page <- fluidPage(
                                       ),
                                       column(width=4,
                                              style='margin-top:24px',
-                                             actionButton("optionbutton3", "More options"),
-                                             bsModal("moreoptions3", "More options for analysis", "optionbutton3", size = "large",
+                                             actionButton("optionbutton_mqa", "More options"),
+                                             bsModal("moreoptions_mqa", "More options for analysis", "optionbutton_mqa", size = "large",
                                                      tags$div(
                                                        width=12,
                                                        style= "height:660px",
                                                        column(width=12, tags$p(style="font-weight:bold;font-size:16px;","Select the step you need to run:")),
                                                        column(width=12, style='margin-bottom:10px',
-                                                              prettyCheckbox(inputId = "step1",
+                                                              prettyCheckbox(inputId = "step1_mqa",
                                                                              label = "Step1: Draw distribution plots",
                                                                              value = TRUE,
                                                                              thick = TRUE,
@@ -490,7 +489,7 @@ additional_analysis_page <- fluidPage(
                                                                              animation = "smooth",
                                                                              status = "primary",
                                                                              inline = TRUE),
-                                                              prettyCheckbox(inputId = "step2",
+                                                              prettyCheckbox(inputId = "step2_mqa",
                                                                              label = "Step2: Quantify concentration",
                                                                              value = TRUE,
                                                                              thick = TRUE,
@@ -498,7 +497,7 @@ additional_analysis_page <- fluidPage(
                                                                              animation = "smooth",
                                                                              status = "primary",
                                                                              inline = TRUE),
-                                                              prettyCheckbox(inputId = "step3",
+                                                              prettyCheckbox(inputId = "step3_mqa",
                                                                              label = "Step3: Pull the KEGG map from KEGG database",
                                                                              value = FALSE,
                                                                              thick = TRUE,
@@ -508,87 +507,87 @@ additional_analysis_page <- fluidPage(
                                                                              inline = TRUE)
                                                        ),
                                                        column(width=12,
-                                                              column(width=6,selectInput(width="350px","summarize_replicates","Summarize technical replicate?",c("TRUE","FALSE"))),
+                                                              column(width=6,selectInput(width="350px","summarize_replicates_mqa","Summarize technical replicate?",c("TRUE","FALSE"))),
                                                               column(width=6,
-                                                                     conditionalPanel(condition = "input.summarize_replicates == 'TRUE'",
-                                                                                      numericInput(width="350px","num_replicate2", "Number of technical replicates  (1-10 limit):", 3, min = 1, max = 10)
+                                                                     conditionalPanel(condition = "input.summarize_replicates_mqa == 'TRUE'",
+                                                                                      numericInput(width="350px","num_replicate_mqa", "Number of technical replicates  (1-10 limit):", 3, min = 1, max = 10)
                                                                      )
                                                               )
                                                        ),
                                                        column(width=12,
                                                               column(width=6,
-                                                                     conditionalPanel(condition = "input.summarize_replicates == 'TRUE'",
-                                                                                      numericInput(width="350px","rep_max_missing_thresh", "Maximum missing value ratio:", 0.3, min = 0, max = 1)
+                                                                     conditionalPanel(condition = "input.summarize_replicates_mqa == 'TRUE'",
+                                                                                      numericInput(width="350px","rep_max_missing_thresh_mqa", "Maximum missing value ratio:", 0.3, min = 0, max = 1)
                                                                      )
                                                               ),
                                                               column(width=6,
-                                                                     conditionalPanel(condition = "input.summarize_replicates == 'TRUE'",
-                                                                                      selectInput(width="350px","summary_method","Choose a replicate summarization method:",c("median","mean"))
+                                                                     conditionalPanel(condition = "input.summarize_replicates_mqa == 'TRUE'",
+                                                                                      selectInput(width="350px","summary_method_mqa","Choose a replicate summarization method:",c("median","mean"))
                                                                      )
                                                               )
                                                        ),
                                                        column(width=12,
-                                                              column(width=6,numericInput(width="350px","mass_error", "Mass-to-charge tolerance(ppm)  (0-100 limit):", 10, min = 0, max = 100)),
-                                                              column(width=6,numericInput(width="350px","time_error", "Retention time tolerance(second)  (0-1000 limit):", 30, min = 0, max = 1000))
+                                                              column(width=6,numericInput(width="350px","mass_error_mqa", "Mass-to-charge tolerance(ppm)  (0-100 limit):", 10, min = 0, max = 100)),
+                                                              column(width=6,numericInput(width="350px","time_error_mqa", "Retention time tolerance(second)  (0-1000 limit):", 30, min = 0, max = 1000))
                                                        ),
-                                                       conditionalPanel(condition = "input.step1 || input.step3",
+                                                       conditionalPanel(condition = "input.step1_mqa || input.step3_mqa",
                                                                         column(style="padding:0px;",12,tags$hr(style="border-top: 1px solid #000000;"))
                                                                         
                                                        ),
-                                                       conditionalPanel(condition = "input.step1",
+                                                       conditionalPanel(condition = "input.step1_mqa",
                                                                         column(width=12, tags$p(style="font-weight:bold;font-size:16px;","Parameters for step1:")),
                                                                         column(width=12,
-                                                                               column(width=6,selectInput(width="300px","groupcheck","More than one group in your sample?",c("FALSE","TRUE"))),
-                                                                               column(width=6,textInput(width="300px","targetID", "Target IDs:","",placeholder="Default: None"))
+                                                                               column(width=6,selectInput(width="300px","groupcheck_mqa","More than one group in your sample?",c("FALSE","TRUE"))),
+                                                                               column(width=6,textInput(width="300px","targetID_mqa", "Target IDs:","",placeholder="Default: None"))
                                                                         ),
                                                                         column(width=12,tags$p(style="color:red","For the target ids, you can enter the sample id that you want to highlight in the sample distribution plot. Each
                                                                                                sample id should be separated by comma, e.g. sample1,sample2"))
                                                                         ),
-                                                       conditionalPanel(condition = "input.step3",
+                                                       conditionalPanel(condition = "input.step3_mqa",
                                                                         column(width=12, tags$p(style="font-weight:bold;font-size:16px;","Parameters for step3:")),
                                                                         column(width=12,
-                                                                               column(width=6,numericInput(width="300px","foldchange_thresh", "Fold Change Threshold (1-100 limit):", 2, min = 1, max = 100)),
-                                                                               column(width=6,numericInput(width="300px","minhit", "Minimum #metablites hitted in KEGG map:", 3, min = 1, max = 100))
+                                                                               column(width=6,numericInput(width="300px","foldchange_thresh_mqa", "Fold Change Threshold (1-100 limit):", 2, min = 1, max = 100)),
+                                                                               column(width=6,numericInput(width="300px","minhit_mqa", "Minimum #metablites hitted in KEGG map:", 3, min = 1, max = 100))
                                                                         ),
                                                                         column(width=12,
-                                                                               column(width=6,colourpicker::colourInput("highcolor", "Color for up-regulation in KEGG map:", "red", showColour = "background")),
-                                                                               column(width=6,colourpicker::colourInput("lowcolor", "Color for down-regulation in KEGG map:", "blue", showColour = "background"))
+                                                                               column(width=6,colourpicker::colourInput("highcolor_mqa", "Color for up-regulation in KEGG map:", "red", showColour = "background")),
+                                                                               column(width=6,colourpicker::colourInput("lowcolor_mqa", "Color for down-regulation in KEGG map:", "blue", showColour = "background"))
                                                                         )
                                                        )
                                                        )
                                       ),
-                                      actionButton("start3","Start processing",icon=icon("play-circle"))
+                                      actionButton("start_mqa","Start processing",icon=icon("play-circle"))
                                       )
                ),
                column(width=12,
                       column(width=4, 
                              id="inputarea",
-                             fileInput("ref_meta_file", "Select standard metabolite library ('.csv' or .txt')",
+                             fileInput("ref_meta_file_mqa", "Select standard metabolite library ('.csv' or .txt')",
                                        multiple = FALSE,
                                        width="350px",
                                        accept = c("text/csv","text/comma-separated-values,text/plain",".txt"))
                       ),
-                      conditionalPanel(condition = "input.step3",
+                      conditionalPanel(condition = "input.step3_mqa",
                                        column(width=4, 
                                               id="inputarea",
-                                              fileInput("foldchange_file", "Select fold change file ('.csv' or .txt')",
+                                              fileInput("foldchange_file_mqa", "Select fold change file ('.csv' or .txt')",
                                                         multiple = FALSE,
                                                         width="350px",
                                                         accept = c("text/csv","text/comma-separated-values,text/plain",".txt"))
                                        )
                       )
                ),
-               column(width=12,verbatimTextOutput("nText6")),
-               column(width=12,verbatimTextOutput("nText7")),
+               column(width=12,verbatimTextOutput("nText_mqa1")),
+               column(width=12,verbatimTextOutput("nText_mqa2")),
                column(width=12,style="padding-left:10px;padding-right:10px;",
-                      conditionalPanel(condition = "!output.done",
+                      conditionalPanel(condition = "!output.done_mqa",
                                        column(width=12, style="text-align:left;",tags$a(target="_blank",href="metabolite_quantification_description.html","Introduction & Input and output file descriptions"))
                       )
                ),
-               conditionalPanel(condition = "output.done",
+               conditionalPanel(condition = "output.done_mqa",
                                 column(width=12, style="text-align:center;",
                                        id="inputarea",
-                                       downloadButton(style="background-color:#417ee0;color:#ffffff;","downloadQdata", label = "Download results")
+                                       downloadButton(style="background-color:#417ee0;color:#ffffff;","downloaddata_mqa", label = "Download results")
                                 )
                ),
                style='primary'

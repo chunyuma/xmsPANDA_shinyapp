@@ -1,60 +1,63 @@
 options(shiny.maxRequestSize=100*1024^2)
 options(shiny.sanitize.errors=FALSE)
 # Server logic
-source("R/source_codes/xmsPANDA_v1.0.8.38.R")
+source("R/source_codes/xmsPANDA_v1.0.8.40.R")
+source("R/source_codes/xMSquant_v0.0.4.R")
 
 server <- function(input, output, session) {
   
   ##################################  Additional Analysis Page ##########################
   
-  check1_interactive <- reactiveValues(count = 1)
+  #################### interactive plot start 
+  
+  check_interactive <- reactiveValues(count = 1)
   search_interactive <- reactiveValues(count = 0)
-  id2_interactive <- NULL
+  id_interactive <- NULL
   #update1 <- reactiveValues(count = 0)
   off_interactive <- reactiveVal(0)
-  observeEvent(input$input_file_interactive,{check1_interactive$count=1})
-  observeEvent(input$feat_inte_interactive,{check1_interactive$count=1})
-  observeEvent(input$classlabel_inte_interactive,{check1_interactive$count=1})
+  observeEvent(input$input_file_interactive,{check_interactive$count=1})
+  observeEvent(input$feat_inte_interactive,{check_interactive$count=1})
+  observeEvent(input$classlabel_inte_interactive,{check_interactive$count=1})
   
   observeEvent(input$start1_interactive, 
                {
                  if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
                    output$nText_interactive <- renderText({shiny::validate(
-                     need(input$input_file_interactive, "No input file provided. Please upload your input file."),
-                     need(input$input_file_interactive$type=="text/csv" || input$input_file_interactive$type=="text/plain", "The format of input file is not correct. Please upload the file with correct format.")
+                     need(isolate(input$input_file_interactive), "No input file provided. Please upload your input file."),
+                     need(isolate(input$input_file_interactive$type)=="text/csv" || isolate(input$input_file_interactive$type)=="text/plain", "The format of input file is not correct. Please upload the file with correct format.")
                    )})
                    shiny::validate(
-                     need(input$input_file_interactive, "No input file provided. Please upload your input file."),
-                     need(input$input_file_interactive$type=="text/csv" || input$input_file_interactive$type=="text/plain", "The format of input file is not correct. Please upload the file with correct format.")
+                     need(isolate(input$input_file_interactive), "No input file provided. Please upload your input file."),
+                     need(isolate(input$input_file_interactive$type)=="text/csv" || isolate(input$input_file_interactive$type)=="text/plain", "The format of input file is not correct. Please upload the file with correct format.")
                    )
                  }
                  if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' || isolate(input$choose_graph)=='Volcano Plot with Box Plot'){
                    output$nText_interactive <- renderText({shiny::validate(
-                     need(input$feat_inte_interactive, "No feature table provided. Please upload your feature table."),
-                     need(input$feat_inte_interactive$type=="text/csv" || input$feat_inte_interactive$type=="text/plain", "The format of feature table is not correct. Please upload the file with correct format."),
-                     need(input$classlabel_inte_interactive, "No class label file provided. Please upload class label file."),
-                     need(input$classlabel_inte_interactive$type=="text/csv" || input$classlabel_inte_interactive$type=="text/plain", "The format of class label file is not correct. Please upload the file with correct format.")
+                     need(isolate(input$feat_inte_interactive), "No feature table provided. Please upload your feature table."),
+                     need(isolate(input$feat_inte_interactive$type)=="text/csv" || isolate(input$feat_inte_interactive$type)=="text/plain", "The format of feature table is not correct. Please upload the file with correct format."),
+                     need(isolate(input$classlabel_inte_interactive), "No class label file provided. Please upload class label file."),
+                     need(isolate(input$classlabel_inte_interactive$type)=="text/csv" || isolate(input$classlabel_inte_interactive$type)=="text/plain", "The format of class label file is not correct. Please upload the file with correct format.")
                    )})
                    shiny::validate(
-                     need(input$feat_inte_interactive, "No feature table provided. Please upload your feature table."),
-                     need(input$feat_inte_interactive$type=="text/csv" || input$feat_inte_interactive$type=="text/plain", "The format of feature table is not correct. Please upload the file with correct format."),
-                     need(input$classlabel_inte_interactive, "No class label file provided. Please upload class label file."),
-                     need(input$classlabel_inte_interactive$type=="text/csv" || input$classlabel_inte_interactive$type=="text/plain", "The format of class label file is not correct. Please upload the file with correct format.")
+                     need(isolate(input$feat_inte_interactive), "No feature table provided. Please upload your feature table."),
+                     need(isolate(input$feat_inte_interactive$type)=="text/csv" || isolate(input$feat_inte_interactive$type)=="text/plain", "The format of feature table is not correct. Please upload the file with correct format."),
+                     need(isolate(input$classlabel_inte_interactive), "No class label file provided. Please upload class label file."),
+                     need(isolate(input$classlabel_inte_interactive$type)=="text/csv" || isolate(input$classlabel_inte_interactive$type)=="text/plain", "The format of class label file is not correct. Please upload the file with correct format.")
                    )
                  }
-                 check1_interactive$count=0
-                 id2_interactive <<- showNotification("Figure is being generated now.", duration=NULL)
+                 check_interactive$count=0
+                 id_interactive <<- showNotification("Figure is being generated now.", duration=NULL)
                })
   
   input_file_interactive <- reactive({
-    if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(input$input_file_interactive$name) ){
+    if(input$start1_interactive!=0  & check_interactive$count==0 & !is.null(isolate(input$input_file_interactive$name)) ){
       
-      if((input$input_file_interactive$type=="text/csv" || input$input_file_interactive$type=="text/plain")){
-        req(input$input_file_interactive)
-        if(input$input_file_interactive$type=="text/plain"){
-          input_file <- read.delim(input$input_file_interactive$datapath,header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+      if((isolate(input$input_file_interactive$type)=="text/csv" || isolate(input$input_file_interactive$type)=="text/plain")){
+        req(isolate(input$input_file_interactive))
+        if(isolate(input$input_file_interactive$type)=="text/plain"){
+          input_file <- read.delim(isolate(input$input_file_interactive$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
         }else{
-          input_file <- read.csv(input$input_file_interactive$datapath,header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          input_file <- read.csv(isolate(input$input_file_interactive$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
         }
         input_file 
         
@@ -63,14 +66,14 @@ server <- function(input, output, session) {
   })
   
   feat_inte_interactive <- reactive({
-    if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(input$feat_inte_interactive$name) ){
+    if(isolate(input$start1_interactive)!=0  & check_interactive$count==0 & !is.null(isolate(input$feat_inte_interactive$name)) ){
       
-      if((input$feat_inte_interactive$type=="text/csv" || input$feat_inte_interactive$type=="text/plain")){
-        req(input$feat_inte_interactive)
-        if(input$feat_inte_interactive$type=="text/plain"){
-          feature_table_file <- read.delim(input$feat_inte_interactive$datapath,header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+      if((isolate(input$feat_inte_interactive$type)=="text/csv" || isolate(input$feat_inte_interactive$type)=="text/plain")){
+        req(isolate(input$feat_inte_interactive))
+        if(isolate(input$feat_inte_interactive$type)=="text/plain"){
+          feature_table_file <- read.delim(isolate(input$feat_inte_interactive$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
         }else{
-          feature_table_file <- read.csv(input$feat_inte_interactive$datapath,header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          feature_table_file <- read.csv(isolate(input$feat_inte_interactive$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
         }
         feature_table_file 
         
@@ -79,14 +82,14 @@ server <- function(input, output, session) {
   })
   
   classlabel_inte_interactive <- reactive({
-    if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(input$classlabel_inte_interactive$name)){
+    if(isolate(input$start1_interactive)!=0  & check_interactive$count==0 & !is.null(isolate(input$classlabel_inte_interactive$name))){
       
-      if((input$classlabel_inte_interactive$type=="text/csv" || input$classlabel_inte_interactive$type=="text/plain")){
-        req(input$classlabel_inte_interactive)
-        if(input$classlabel_inte_interactive$type=="text/plain"){
-          class_labels_file <- read.delim(input$classlabel_inte_interactive$datapath,header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+      if((isolate(input$classlabel_inte_interactive$type)=="text/csv" || isolate(input$classlabel_inte_interactive$type=="text/plain"))){
+        req(isolate(input$classlabel_inte_interactive))
+        if(isolate(input$classlabel_inte_interactive$type)=="text/plain"){
+          class_labels_file <- read.delim(isolate(input$classlabel_inte_interactive$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
         }else{
-          class_labels_file <- read.csv(input$classlabel_inte_interactive$datapath,header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          class_labels_file <- read.csv(isolate(input$classlabel_inte_interactive$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
         }
         class_labels_file 
       }
@@ -491,7 +494,7 @@ server <- function(input, output, session) {
     
     if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
       
-      if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(input_file_interactive()) & all_alert()){
+      if(input$start1_interactive!=0  & check_interactive$count==0 & !is.null(input_file_interactive()) & all_alert()){
         
         if(isolate(input$choose_graph)=='Manhattan Plot only'){
           
@@ -720,7 +723,7 @@ server <- function(input, output, session) {
       
     }else{
       
-      if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
+      if(input$start1_interactive!=0  & check_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
         
         if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
           
@@ -986,7 +989,7 @@ server <- function(input, output, session) {
     
     if(isolate(input$choose_graph)=='Manhattan Plot only' || isolate(input$choose_graph)=='Volcano Plot only'){
       
-      if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(input_file_interactive()) & all_alert()){
+      if(input$start1_interactive!=0  & check_interactive$count==0 & !is.null(input_file_interactive()) & all_alert()){
         
         if(isolate(input$choose_graph)=='Manhattan Plot only'){
           
@@ -1130,7 +1133,7 @@ server <- function(input, output, session) {
       
     }else{
         
-        if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
+        if(input$start1_interactive!=0  & check_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
           
           if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
             
@@ -1374,7 +1377,7 @@ server <- function(input, output, session) {
     
     if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' || isolate(input$choose_graph)=='Volcano Plot with Box Plot'){
     
-    if(input$start1_interactive!=0  & check1_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
+    if(input$start1_interactive!=0  & check_interactive$count==0 & !is.null(feat_inte_interactive()) & !is.null(classlabel_inte_interactive()) & all_alert()){
       
       if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot'){
         
@@ -1805,9 +1808,9 @@ server <- function(input, output, session) {
     
     if(isolate(input$choose_graph)=='Manhattan Plot only' & !is.null(pplot1()) & !is.null(pplot2())){
       
-        if (!is.null(id2_interactive)){
-          removeNotification(id2_interactive)
-          id2_interactive <<- NULL
+        if (!is.null(id_interactive)){
+          removeNotification(id_interactive)
+          id_interactive <<- NULL
         }
       
       output$manhattan_only_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
@@ -1822,9 +1825,9 @@ server <- function(input, output, session) {
       
     } else if(isolate(input$choose_graph)=='Volcano Plot only' & !is.null(pplot1()) & is.null(pplot2())){
       
-      if (!is.null(id2_interactive)){
-        removeNotification(id2_interactive)
-        id2_interactive <<- NULL
+      if (!is.null(id_interactive)){
+        removeNotification(id_interactive)
+        id_interactive <<- NULL
       }
       
       output$volcano_only_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
@@ -1837,9 +1840,9 @@ server <- function(input, output, session) {
       
     } else if(isolate(input$choose_graph)=='Manhattan Plot with Box Plot' & !is.null(pplot1()) ){
       
-      if (!is.null(id2_interactive)){
-        removeNotification(id2_interactive)
-        id2_interactive <<- NULL
+      if (!is.null(id_interactive)){
+        removeNotification(id_interactive)
+        id_interactive <<- NULL
       }
       
       output$manhattan_box_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
@@ -1854,9 +1857,9 @@ server <- function(input, output, session) {
     
     } else if(isolate(input$choose_graph)=='Volcano Plot with Box Plot' & !is.null(pplot1())){
     
-      if (!is.null(id2_interactive)){
-        removeNotification(id2_interactive)
-        id2_interactive <<- NULL
+      if (!is.null(id_interactive)){
+        removeNotification(id_interactive)
+        id_interactive <<- NULL
       }
       
       output$volcano_box_plot1 <- renderPlotly({if(!is.null(pplot1())){pplot1()}})
@@ -1946,6 +1949,422 @@ server <- function(input, output, session) {
       ggsave(file, plot = plot4_single_plot(), device = "png", width=4, height=4)
     }
   )
+  
+  #################### interactive plot end
+  
+  #################### functional class scoring start 
+  
+  check_fcs <- reactiveValues(count = 0)
+  done_fcs <- reactiveValues(cluster_table = matrix())
+  id_fcs <- NULL
+  observeEvent(input$start_fcs,{check_fcs$count=0})
+  
+  
+  observeEvent(input$start_fcs, 
+               {
+                 output$nText_fcs1 <- renderText({shiny::validate(
+                   need(isolate(input$clusterinput_fcs), "No data file was provided. Please upload your data file."),
+                   need(isolate(input$clusterinput_fcs$type)=="text/csv" || isolate(input$clusterinput_fcs$type)=="text/plain", "The format of data file is not correct. Please upload the file with correct format.")
+                 )})
+                 shiny::validate(
+                   need(isolate(input$clusterinput_fcs), "No data file was provided. Please upload your data file."),
+                   need(isolate(input$clusterinput_fcs$type)=="text/csv" || isolate(input$clusterinput_fcs$type)=="text/plain", "The format of data file is not correct. Please upload the file with correct format.")
+                 )
+                 check_fcs$count=1
+                 id_fcs <<- showNotification("Data is being processed now.", duration=NULL)
+               })
+  
+  
+  cluster_metab_fcs <- reactive({
+    
+    if(input$start_fcs!=0  & check_fcs$count==1){
+      
+      if(isolate(input$clusterinput_fcs$type)=="text/plain"){
+        metab_data <- read.delim(isolate(input$clusterinput_fcs$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+      }else{
+        if(isolate(input$clusterinput_fcs$type)=="text/csv"){
+          metab_data <- read.csv(isolate(input$clusterinput_fcs$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+        }else{
+          
+          metab_data <- NULL
+        }
+      }
+      metab_data
+    }
+    
+  })
+  
+  output$nText_fcs2 <- renderText({
+    
+    if(input$start_fcs!=0  & check_fcs$count==1){
+      
+      kegg_species_code_fcs <- switch(isolate(input$kegg_species_code_fcs), "Homo sapiens(default)" = "hsa",
+                                  "Mus musculus" = "mmu",
+                                  "Pan troglodytes" = "ptr",
+                                  "Macaca mulatta" = "mcc",
+                                  "Bos taurus" = "bta",
+                                  "Rattus norvegicus" = "rno",
+                                  "Danio rerio"= "dre",
+                                  "C. elegans"= "cel",
+                                  "Drosophila melanogaster"= "dme"
+      )
+      
+      if(isolate(input$database_fcs)=='pathway(default)'){
+        database_fcs="pathway"
+      }else{
+        database_fcs="module"
+      }
+      
+      if(isolate(input$type.statistic_fcs)=='TRUE'){
+        type.statistic_fcs="p-value"
+      }else{
+        type.statistic_fcs="other"
+      }
+      
+      
+      done_fcs$cluster_table <-get_fcs(metab_data=cluster_metab_fcs(),kegg_species_code=kegg_species_code_fcs,database=database_fcs,type.statistic=type.statistic_fsc)
+      NULL
+
+      
+    }else{
+      
+      NULL
+    }
+    
+  })
+  
+  
+  observeEvent({if(dim(done_fcs$cluster_table)[2]==4) TRUE else return()},{
+    if (!is.null(id_fcs)){
+      removeNotification(id_fcs)
+      id_fcs <<- NULL
+    }
+  })
+  
+  
+  output$pathwaytb_fcs <- renderDT(
+    
+    if(dim(done_fcs$cluster_table)[2]==4){
+      
+      table_fcs = done_fcs$cluster_table
+      table_fcs[,1] <- as.character(table_fcs[,1])
+      
+      for(i in 1:dim(table_fcs)[1]){
+        
+        if(isolate(input$database_fcs)=='pathway(default)'){
+          table_fcs[i,1]=paste("<a target='_blank' href='https://www.genome.jp/dbget-bin/www_bget?",table_fcs[i,1],"'>",table_fcs[i,1],"</a>",sep="")
+        }else{
+          
+          moduleid = strsplit(table_fcs[i,1],split = ":")[[1]][length(strsplit(table_fcs[i,1],split = ":")[[1]])]
+          table_fcs[i,1]=paste("<a target='_blank' href='https://www.kegg.jp/kegg-bin/show_module?",moduleid,"'>",table_fcs[i,1],"</a>",sep="")
+        }
+        
+      }
+      
+      all_fcs=dim(table_fcs)[1]
+      if(all_fcs>1000){
+        lines=c(5,10,50,100,500,1000,all_fcs)
+      }else{
+        lines=c(5,10,50,100,500,1000)
+      }
+      
+      datatable(table_fcs,options = list(dom='lrtip', lengthMenu = lines), rownames=FALSE, escape = FALSE)
+    }
+    
+  )
+  
+  output$downloadtableData <- downloadHandler(
+    filename = function() {
+      if(input$database_fcs=='pathway(default)'){
+        paste("pathway_table", ".csv", sep = "")
+      }else{
+        paste("module_table", ".csv", sep = "")
+      }
+    },
+    content = function(file) {
+      write.csv(done_fcs$cluster_table, file, row.names = FALSE)
+    }
+  )
+
+  output$checktable_fcs <- reactive({input$start_fcs!=0  & check_fcs$count==1 & dim(done_fcs$cluster_table)[2]==4})
+  outputOptions(output, "checktable_fcs", suspendWhenHidden = FALSE)
+  
+  
+  output$downloadbutton_fcs <- renderUI({
+    column(12,style="margin-top:20px;text-align:right;",
+           downloadButton(style = "background-color:#417ee0;color:#ffffff;",outputId = "downloadtableData", label = "Download Table")
+    )
+  })
+  
+  
+  #################### functional class scoring end
+  
+  #################### metabolite quantification analysis start 
+  
+  check_mqa <- reactiveValues(count = 0)
+  done_mqa <- reactiveValues(count = 0)
+  id_mqa <- NULL
+  #off <- reactiveVal(0)
+  observeEvent(input$start_mqa,{check_mqa$count=0})
+  
+  
+  observeEvent(input$start_mqa, 
+               {
+                 output$nText_mqa1 <- renderText({shiny::validate(
+                   need(isolate(input$feat_inte_mqa), "No feature table provided. Please upload your feature table."),
+                   need(isolate(input$feat_inte_mqa$type)=="text/csv" || isolate(input$feat_inte_mqa$type)=="text/plain", "The format of feature table is not correct. Please upload the file with correct format."),
+                   need(isolate(input$classlabel_inte_mqa), "No class label file was provided. Please upload your class label file."),
+                   need(isolate(input$classlabel_inte_mqa$type)=="text/csv" || isolate(input$classlabel_inte_mqa$type)=="text/plain", "The format of class label file is not correct. Please upload the file with correct format."),
+                   need(isolate(input$ref_meta_file_mqa), "No standard metabolite library file was provided. Please upload your data file."),
+                   need(isolate(input$ref_meta_file_mqa$type)=="text/csv" || isolate(input$ref_meta_file_mqa$type)=="text/plain", "The format of standard metabolite library file is not correct. Please upload the file with correct format."),
+                   need(any(c(isolate(input$step1_mqa),isolate(input$step2_mqa),isolate(input$step3_mqa))),"Please select at least one step."),
+                   if(isolate(input$step3_mqa)){
+                     need(isolate(input$foldchange_file_mqa), "No fold change file was provided. Please upload your data file.")
+                   },
+                   if(isolate(input$step3_mqa)){
+                     need(isolate(input$foldchange_file_mqa$type)=="text/csv" || isolate(input$foldchange_file_mqa$type)=="text/plain", "The format of fold change file is not correct. Please upload the file with correct format.")
+                   }
+                 )})
+                 shiny::validate(
+                   need(isolate(input$feat_inte_mqa), "No feature table provided. Please upload your feature table."),
+                   need(isolate(input$feat_inte_mqa$type)=="text/csv" || isolate(input$feat_inte_mqa$type)=="text/plain", "The format of feature table is not correct. Please upload the file with correct format."),
+                   need(isolate(input$classlabel_inte_mqa), "No class label file was provided. Please upload your class label file."),
+                   need(isolate(input$classlabel_inte_mqa$type)=="text/csv" || isolate(input$classlabel_inte_mqa$type)=="text/plain", "The format of class label file is not correct. Please upload the file with correct format."),
+                   need(isolate(input$ref_meta_file_mqa), "No standard metabolite library file was provided. Please upload your data file."),
+                   need(isolate(input$ref_meta_file_mqa$type)=="text/csv" || input$ref_meta_file_mqa$type=="text/plain", "The format of standard metabolite library file is not correct. Please upload the file with correct format."),
+                   need(any(c(isolate(input$step1_mqa),isolate(input$step2_mqa),isolate(input$step3_mqa))),"Please select at least one step."),
+                   if(isolate(input$step3_mqa)){
+                     need(isolate(input$foldchange_file_mqa), "No fold change file was provided. Please upload your data file.")
+                   },
+                   if(isolate(input$step3_mqa)){
+                     need(isolate(input$foldchange_file_mqa$type)=="text/csv" || isolate(input$foldchange_file_mqa$type)=="text/plain", "The format of fold change file is not correct. Please upload the file with correct format.")
+                   }
+                 )
+                 check_mqa$count=1
+                 id_mqa <<- showNotification("Data is being processed now.", duration=NULL)
+               })
+  
+  
+  feat_inte_mqa <- reactive({
+    if(input$start_mqa!=0  & check_mqa$count==1 & !is.null(isolate(input$feat_inte_mqa$name)) ){
+      
+      if((isolate(input$feat_inte_mqa$type)=="text/csv" || isolate(input$feat_inte_mqa$type)=="text/plain")){
+        req(isolate(input$feat_inte_mqa))
+        if(isolate(input$feat_inte_mqa$type)=="text/plain"){
+          featuretable_file <- read.delim(isolate(input$feat_inte_mqa$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+        }else{
+          if(input$feat_inte_mqa$type=="text/csv"){
+            featuretable_file <- read.csv(isolate(input$feat_inte_mqa$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          }
+        }
+        featuretable_file 
+        
+      }
+    }
+  })
+  
+  classlabel_inte_mqa <- reactive({
+    if(input$start_mqa!=0 & check_mqa$count==1 & !is.null(isolate(input$classlabel_inte_mqa$name)) ){
+      
+      if((isolate(input$classlabel_inte_mqa$type)=="text/csv" || isolate(input$classlabel_inte_mqa$type)=="text/plain")){
+        req(isolate(input$classlabel_inte_mqa))
+        if(isolate(input$classlabel_inte_mqa$type)=="text/plain"){
+          classlabel_file <- read.delim(isolate(input$classlabel_inte_mqa$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+        }else{
+          if(input$classlabel_inte_mqa$type=="text/csv"){
+            classlabel_file <- read.csv(isolate(input$classlabel_inte_mqa$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          }
+        }
+        classlabel_file 
+        
+      }
+    }
+  })
+  
+  ref_meta_file_mqa <- reactive({
+    if(input$start_mqa!=0 & check_mqa$count==1 & !is.null(isolate(input$ref_meta_file_mqa$name)) ){
+      
+      if((isolate(input$ref_meta_file_mqa$type)=="text/csv" || isolate(input$ref_meta_file_mqa$type)=="text/plain")){
+        req(isolate(input$ref_meta_file_mqa))
+        if(isolate(input$ref_meta_file_mqa$type)=="text/plain"){
+          ref_meta_file <- read.delim(isolate(input$ref_meta_file_mqa$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+        }else{
+          if(isolate(input$ref_meta_file_mqa$type)=="text/csv"){
+            ref_meta_file <- read.csv(isolate(input$ref_meta_file_mqa$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          }
+        }
+        ref_meta_file 
+        
+      }
+    }
+  })
+  
+  foldchange_file_mqa <- reactive({
+    if(input$start_mqa!=0 & check_mqa$count==1 & isolate(input$step3_mqa) & !is.null(isolate(input$foldchange_file_mqa$name)) ){
+      
+      if((isolate(input$foldchange_file_mqa$type)=="text/csv" || isolate(input$foldchange_file_mqa$type)=="text/plain")){
+        req(isolate(input$foldchange_file_mqa))
+        if(input$foldchange_file_mqa$type=="text/plain"){
+          foldchange_file <- read.delim(isolate(input$foldchange_file_mqa$datapath),header=TRUE,sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+        }else{
+          if(input$foldchange_file_mqa$type=="text/csv"){
+            foldchange_file <- read.csv(isolate(input$foldchange_file_mqa$datapath),header=TRUE,sep=",",stringsAsFactors=FALSE,check.names=FALSE)
+          }
+        }
+        foldchange_file 
+        
+      }
+    }else{
+      
+      NA
+    }
+  })
+  
+  session_outloc_mqa <- reactive({
+    if(input$start_mqa!=0 & check_mqa$count==1){
+      cur_date<-Sys.time()
+      cur_date<-gsub(x=cur_date,pattern="-",replacement="")
+      cur_date<-gsub(x=cur_date,pattern=":",replacement="")
+      cur_date<-gsub(x=cur_date,pattern=" ",replacement="")
+      outloc<-paste('~/metabolite_quantification_analysis_results',cur_date,sep="")
+      outloc
+    }else{
+      NULL
+    }
+  })
+  
+  
+  output$nText_mqa2 <- renderText({
+    
+    if(input$start_mqa!=0  & check_mqa$count==1){
+      
+      isolate({
+        steps=""
+        if(input$step1_mqa){
+          steps=paste(steps,"1",sep="")
+          if(input$groupcheck_mqa=="TRUE"){
+            groupcheck=TRUE
+          }else{
+            groupcheck=FALSE
+          }
+          if(input$targetID_mqa==""){
+            targetID=NA
+          }else{
+            targetID=unlist(strsplit(input$targetID_mqa,split=","))
+          }
+        }else{
+          groupcheck=FALSE
+          targetID=NA
+        }
+        if(input$step2_mqa){
+          steps=paste(steps,"2",sep="")
+        }
+        if(input$step3_mqa){
+          steps=paste(steps,"3",sep="")
+          highcolor=input$highcolor_mqa
+          lowcolor=input$lowcolor_mqa
+          if(!is.na(input$minhit_mqa)){
+            minhit <- input$minhit_mqa
+          }else{
+            stop("Please enter the correct value for 'Minimum #metablites hitted in KEGG map'.")
+          }
+        }else{
+          minhit=3
+          highcolor="red"
+          lowcolor="blue"
+        }
+        
+        if(input$summarize_replicates_mqa=="TRUE"){
+          summarize_replicates=TRUE
+        }else{
+          summarize_replicates=FALSE
+        }
+        
+        if(!is.na(input$num_replicate_mqa)){
+          num_replicate2 <- input$num_replicate_mqa
+        }else{
+          stop("Please enter the correct value for 'Number of technical replicates'.")
+        }
+        
+        if(!is.na(input$rep_max_missing_thresh_mqa)){
+          rep_max_missing_thresh <- input$rep_max_missing_thresh_mqa
+        }else{
+          stop("Please enter the correct value for 'Maximum missing value ratio'.")
+        }
+        
+        if(!is.na(input$mass_error_mqa)){
+          mass_error <- input$mass_error_mqa
+        }else{
+          stop("Please enter the correct value for 'Mass-to-charge tolerance'.")
+        }
+        
+        if(!is.na(input$time_error_mqa)){
+          time_error <- input$time_error_mqa
+        }else{
+          stop("Please enter the correct value for 'Retention time tolerance'.")
+        }
+        
+        quant(Xmat=feat_inte_mqa(),Ymat=classlabel_inte_mqa(),Wmat=ref_meta_file_mqa(),Zmat=foldchange_file_mqa(),
+              feature_table=NA,class_file=NA,ref_list=NA,foldchange_list=NA,
+              outloc=session_outloc_mqa(),
+              num_replicates=num_replicate2,
+              summarize_replicates=summarize_replicates,
+              rep.max.missing.thresh=rep_max_missing_thresh,
+              summary.method=input$summary_method_mqa,
+              mass_error= mass_error,
+              time_error= time_error,
+              percent_node=1,
+              steps=steps,
+              min_num_nonmissing=3,
+              targetID=targetID,
+              minhit=minhit,
+              groupcheck=groupcheck,
+              highcolor=highcolor,
+              lowcolor=lowcolor) 
+        
+        
+        done_mqa$count=1
+        #file.copy(paste(getwd(),'matrix_centrality.txt',sep='/'),session_outloc())
+        setwd(session_outloc_mqa())
+        zip(zipfile=paste(basename(session_outloc_mqa()),'zip',sep='.'), files='.')
+        print("Processing complete. Please click on download button to save the results.")
+        
+      })  
+      
+    }else{
+      
+      NULL
+    }
+    
+  })
+  
+  
+  observeEvent({if(done_mqa$count==1) TRUE else return()},{
+    if (!is.null(id_mqa)){
+      removeNotification(id_mqa)
+      id_mqa <<- NULL
+    }
+  })
+  
+  output$downloadQdata <- downloadHandler(
+    
+    #if(input$go!=0 && input$featselmethod!="-" && input$feature_table_file!="" && input$class_labels_file!=""){
+    
+    filename <- function() {
+      paste(basename(session_outloc_mqa()), "zip", sep=".")
+    },
+    content <- function(file) {
+      fname_mqa <-paste(session_outloc_mqa(),"/",basename(session_outloc_mqa()), ".zip", sep="")
+      file.copy(fname_mqa, file)
+    },
+    contentType = "application/zip"
+    #}
+  )
+  
+  output$done_mqa <- reactive({done_mqa$count==1})
+  outputOptions(output, "done_mqa", suspendWhenHidden = FALSE)
+  
+  #################### metabolite quantification analysis end
   
 } 
 
