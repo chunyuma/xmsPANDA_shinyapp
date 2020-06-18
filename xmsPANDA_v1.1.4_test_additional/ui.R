@@ -64,7 +64,7 @@ additional_analysis_page <- fluidPage(
                                                                              ".txt"))
                                                  )
                                                ),
-                                               column(12,tags$p(style="font-size:15px;font-weight:bold","See the Format of Input File ",tags$a(href="",target="_blank","here")))
+                                               column(12,tags$p(style="font-size:15px;font-weight:bold","See the Format of Input File ",tags$a(href="Interactive_Plot.html",target="_blank","here")))
                                              )  
                                       ),
                                       column(width=4,
